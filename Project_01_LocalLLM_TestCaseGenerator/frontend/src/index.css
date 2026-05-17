@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --bg-color: #0f172a;
+  --surface-color: rgba(30, 41, 59, 0.7);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #8b5cf6;
+  --danger-color: #ef4444;
+  --success-color: #10b981;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: var(--surface-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Base Elements */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Jira Markdown Formatting */
+.jira-markdown h1 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary-color); }
+.jira-markdown h2 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--accent-color); margin-top: 1.5rem; }
+.jira-markdown h3 { font-size: 1.1rem; margin-bottom: 0.5rem; margin-top: 1rem; }
+.jira-markdown p { margin-bottom: 1rem; line-height: 1.6; }
+.jira-markdown ul, .jira-markdown ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+.jira-markdown li { margin-bottom: 0.25rem; }
+.jira-markdown pre { 
+  background: #0f172a; 
+  padding: 1rem; 
+  border-radius: 8px; 
+  overflow-x: auto; 
+  margin-bottom: 1rem;
+  border: 1px solid var(--surface-border);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+}
+.jira-markdown code {
+  font-family: 'Fira Code', monospace;
+  background: rgba(255,255,255,0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.jira-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.jira-markdown th, .jira-markdown td {
+  border: 1px solid var(--surface-border);
+  padding: 0.75rem;
+  text-align: left;
+}
+.jira-markdown th {
+  background: rgba(255,255,255,0.05);
+  font-weight: 600;
+}
