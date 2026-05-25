@@ -1,0 +1,3238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright MCP - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    .topic table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    .topic th, .topic td { padding: 10px 12px; border: 1px solid #e0e0e0; text-align: left; }
+    .topic th { background: #f0f0f0; font-weight: 600; }
+    .topic tr:nth-child(even) { background: #fafafa; }
+    .topic a { color: #1565c0; text-decoration: none; }
+    .topic a:hover { text-decoration: underline; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-learning { background: #e8f5e9; color: #2e7d32; }
+    .badge-exercise { background: #fff3e0; color: #e65100; }
+    .badge-interview { background: #fce4ec; color: #c62828; }
+    .badge-note { background: #e3f2fd; color: #1565c0; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Playwright MCP</h2>
+<div class="section-label">Learning</div>
+<a href="#01-what-is-mcp">What Is MCP</a>
+<a href="#02-mcp-architecture">MCP Architecture</a>
+<a href="#03-how-playwright-mcp-works">How Playwright MCP Works</a>
+<a href="#04-jira-mcp-overview">Jira MCP Overview</a>
+<a href="#05-document-creation-mcp">Document Creation MCP</a>
+<a href="#06-simple-mcp-example">Simple MCP Example</a>
+<a href="#07-mcp-flow-diagrams">MCP Flow Diagrams</a>
+<a href="#08-mcp-tools-reference">MCP Tools Reference</a>
+<div class="section-label">Exercises</div>
+<a href="#01-setup-mcp-exercise">Setup MCP Exercise</a>
+<a href="#02-browser-automation-exercise">Browser Automation Exercise</a>
+<a href="#03-test-plan-exercise">Test Plan Exercise</a>
+<a href="#04-failure-handling-exercise">Failure Handling Exercise</a>
+<a href="#05-stlc-mini-project">STLC Mini Project</a>
+<div class="section-label">Notes</div>
+<a href="#jira-mcp-setup-guide">Jira MCP Setup Guide</a>
+<a href="#mcp-quick-reference">MCP Quick Reference</a>
+<a href="#playwright-mcp-commands">Playwright MCP Commands</a>
+<a href="#stlc-workflow-notes">STLC Workflow Notes</a>
+<div class="section-label">Interview Questions</div>
+<a href="#01-mcp-interview-qa">MCP Interview QA</a>
+<a href="#02-playwright-mcp-interview-qa">Playwright MCP Interview QA</a>
+<a href="#03-stlc-automation-interview-qa">STLC Automation Interview QA</a>
+
+  </nav>
+  <main class="main">
+    <h1>Playwright MCP</h1>
+<div class="subtitle">Model Context Protocol - End-to-End STLC Automation with AI</div>
+<div class="topic" id="01-what-is-mcp">
+<span class="badge badge-learning">Learning</span>
+<h2>What Is MCP</h2>
+<h2>What is MCP (Model Context Protocol)?</h2>
+<h3>Introduction</h3>
+<p><strong>MCP (Model Context Protocol)</strong> is an open standard created by <strong>Anthropic</strong> that enables AI models (like Claude) to connect to external tools, data sources, and services through a unified protocol.</p>
+<h3>The USB-C Analogy</h3>
+<p>Think of MCP like a <strong>USB-C port</strong> for AI:</p>
+<ul>
+<li>Before USB-C, every device had its own charger/connector</li>
+<li>USB-C provides ONE standard port that works with everything</li>
+<li>Similarly, MCP provides ONE standard protocol for AI to connect to ANY tool</li>
+</ul>
+<p><strong>Without MCP:</strong></p>
+<pre><code>AI &lt;--custom code--&gt; Tool A
+AI &lt;--different API--&gt; Tool B
+AI &lt;--another adapter--&gt; Tool C</code></pre>
+<p><strong>With MCP:</strong></p>
+<pre><code>AI &lt;--MCP--&gt; Tool A
+AI &lt;--MCP--&gt; Tool B
+AI &lt;--MCP--&gt; Tool C</code></pre>
+<h3>Why Does MCP Matter?</h3>
+<h3>The Problem It Solves</h3>
+<p>Before MCP, connecting AI to external tools required:</p>
+<ol>
+<li>Custom API integrations for each tool</li>
+<li>Different authentication methods for each service</li>
+<li>Unique data formats and protocols</li>
+<li>Maintaining N different integrations</li>
+</ol>
+<h3>The MCP Solution</h3>
+<p>MCP provides:</p>
+<ul>
+<li><strong>One protocol</strong> to connect AI to any tool</li>
+<li><strong>Standardized tool discovery</strong> - AI can ask "what tools are available?"</li>
+<li><strong>Consistent request/response format</strong> - same structure for every tool</li>
+<li><strong>Security built-in</strong> - controlled access to tools and data</li>
+</ul>
+<h3>The Three Roles in MCP</h3>
+<h3>1. Host (The AI Application)</h3>
+<p>The host is the application that runs the AI model. Examples:</p>
+<ul>
+<li><strong>Claude Desktop</strong> - Anthropic's desktop app</li>
+<li><strong>Claude Code</strong> - CLI tool for developers</li>
+<li><strong>VS Code with Claude extension</strong></li>
+<li><strong>Your custom AI application</strong></li>
+</ul>
+<p>The host is responsible for:</p>
+<ul>
+<li>Managing MCP client connections</li>
+<li>Presenting tool results to the AI model</li>
+<li>Handling user permissions and approvals</li>
+</ul>
+<h3>2. Client (The Protocol Handler)</h3>
+<p>The client lives inside the host and handles the MCP protocol:</p>
+<ul>
+<li>Discovers available servers</li>
+<li>Sends tool call requests</li>
+<li>Receives and parses responses</li>
+<li>Maintains connection state</li>
+</ul>
+<p>Think of the client as the <strong>translator</strong> between the AI and the tools.</p>
+<h3>3. Server (The Tool Provider)</h3>
+<p>The server exposes tools that the AI can use. Examples:</p>
+<ul>
+<li><strong>Playwright MCP Server</strong> - provides browser automation tools</li>
+<li><strong>Jira MCP Server</strong> - provides issue tracking tools</li>
+<li><strong>File System MCP Server</strong> - provides file read/write tools</li>
+<li><strong>GitHub MCP Server</strong> - provides repository management tools</li>
+</ul>
+<p>Each server:</p>
+<ul>
+<li>Declares what tools it offers (tool schemas)</li>
+<li>Handles tool execution requests</li>
+<li>Returns results in MCP format</li>
+</ul>
+<h3>How MCP Communication Works</h3>
+<h3>Step 1: Discovery</h3>
+<pre><code>Host: &quot;What tools do you have?&quot;
+Server: &quot;I have: browser_navigate, browser_click, browser_fill_form, ...&quot;</code></pre>
+<h3>Step 2: Tool Call</h3>
+<pre><code>AI: &quot;I need to navigate to example.com&quot;
+Host -&gt; Client -&gt; Server: { tool: &quot;browser_navigate&quot;, args: { url: &quot;https://example.com&quot; } }</code></pre>
+<h3>Step 3: Result</h3>
+<pre><code>Server -&gt; Client -&gt; Host -&gt; AI: { result: &quot;Navigated to https://example.com successfully&quot; }</code></pre>
+<h3>Transport Mechanisms</h3>
+<p>MCP supports two transport methods:</p>
+<h3>stdio (Standard Input/Output)</h3>
+<ul>
+<li>Server runs as a <strong>child process</strong></li>
+<li>Communication through stdin/stdout pipes</li>
+<li>Best for <strong>local tools</strong> (file system, local databases)</li>
+<li>Most common for desktop applications</li>
+</ul>
+<pre><code>Host Process
+  └── spawns Server Process
+       ├── stdin  (Host -&gt; Server)
+       └── stdout (Server -&gt; Host)</code></pre>
+<h3>HTTP with SSE (Server-Sent Events)</h3>
+<ul>
+<li>Server runs as a <strong>web service</strong></li>
+<li>Communication over HTTP</li>
+<li>Best for <strong>remote tools</strong> (cloud APIs, shared services)</li>
+<li>Supports multiple concurrent clients</li>
+</ul>
+<pre><code>Host ──HTTP POST──&gt; Server (tool calls)
+Host &lt;──SSE──────── Server (results, notifications)</code></pre>
+<h3>MCP vs Traditional API Integration</h3>
+<table>
+<tr>
+<th>Feature</th>
+<th>Traditional API</th>
+<th>MCP</th>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Read docs manually</td>
+<td>Automatic tool discovery</td>
+</tr>
+<tr>
+<td>Format</td>
+<td>Different per API</td>
+<td>Standardized JSON-RPC</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>API keys, OAuth, etc.</td>
+<td>Handled by host</td>
+</tr>
+<tr>
+<td>AI-Friendly</td>
+<td>Must write prompts</td>
+<td>Native tool schemas</td>
+</tr>
+<tr>
+<td>Multi-tool</td>
+<td>N integrations</td>
+<td>1 protocol</td>
+</tr>
+</table>
+<h3>MCP in Test Automation</h3>
+<p>MCP is particularly powerful for test automation because it allows AI to:</p>
+<ol>
+<li><strong>Plan Tests</strong> - Read requirements and generate test plans</li>
+<li><strong>Write Tests</strong> - Create test cases based on application behavior</li>
+<li><strong>Execute Tests</strong> - Drive browsers, APIs, and databases</li>
+<li><strong>Report Defects</strong> - Create tickets in Jira/GitHub Issues</li>
+<li><strong>Generate Reports</strong> - Create test execution summaries</li>
+</ol>
+<p>This is exactly what we'll build in the STLC project in this lecture!</p>
+<h3>Key Terminology</h3>
+<table>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>Model Context Protocol - the open standard</td>
+</tr>
+<tr>
+<td><strong>Host</strong></td>
+<td>Application running the AI model</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>Protocol handler inside the host</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td>Tool provider (e.g., Playwright MCP)</td>
+</tr>
+<tr>
+<td><strong>Tool</strong></td>
+<td>A specific capability (e.g., <span class="inline-code">browser_click</span>)</td>
+</tr>
+<tr>
+<td><strong>Resource</strong></td>
+<td>Data the server can provide (e.g., file contents)</td>
+</tr>
+<tr>
+<td><strong>Prompt</strong></td>
+<td>Pre-built templates the server offers</td>
+</tr>
+<tr>
+<td><strong>Transport</strong></td>
+<td>Communication method (stdio or HTTP/SSE)</td>
+</tr>
+</table>
+<h3>Summary</h3>
+<ul>
+<li>MCP is the <strong>universal connector</strong> for AI tools</li>
+<li>It has three roles: <strong>Host</strong>, <strong>Client</strong>, <strong>Server</strong></li>
+<li>Tools are <strong>discovered automatically</strong> - no manual setup per tool</li>
+<li>It supports <strong>stdio</strong> (local) and <strong>HTTP/SSE</strong> (remote) transports</li>
+<li>For testing, MCP enables <strong>full STLC automation</strong> through AI agents</li>
+</ul>
+</div>
+<div class="topic" id="02-mcp-architecture">
+<span class="badge badge-learning">Learning</span>
+<h2>MCP Architecture</h2>
+<h2>MCP Architecture Diagrams</h2>
+<h3>1. High-Level Architecture</h3>
+<pre><code>graph TB
+    subgraph Host[&quot;Host (AI Application)&quot;]
+        AI[&quot;AI Model (Claude)&quot;]
+        subgraph Clients[&quot;MCP Clients&quot;]
+            C1[&quot;Client 1&quot;]
+            C2[&quot;Client 2&quot;]
+            C3[&quot;Client 3&quot;]
+        end
+    end
+
+    subgraph Servers[&quot;MCP Servers&quot;]
+        S1[&quot;Playwright MCP Server&quot;]
+        S2[&quot;Jira MCP Server&quot;]
+        S3[&quot;File System MCP Server&quot;]
+    end
+
+    AI --&gt; C1
+    AI --&gt; C2
+    AI --&gt; C3
+    C1 &lt;--&gt;|MCP Protocol| S1
+    C2 &lt;--&gt;|MCP Protocol| S2
+    C3 &lt;--&gt;|MCP Protocol| S3
+
+    S1 --&gt; Browser[&quot;Browser&quot;]
+    S2 --&gt; Jira[&quot;Jira Cloud&quot;]
+    S3 --&gt; FS[&quot;File System&quot;]</code></pre>
+<p><strong>Key Insight:</strong> One Host can connect to multiple Servers simultaneously. Each Server provides different tools, but they all speak the same MCP protocol.</p>
+<h3>2. MCP Request/Response Lifecycle</h3>
+<pre><code>sequenceDiagram
+    participant User
+    participant AI as AI Model
+    participant Client as MCP Client
+    participant Server as MCP Server
+    participant Tool as External Tool
+
+    User-&gt;&gt;AI: &quot;Navigate to example.com and click login&quot;
+
+    Note over AI: Decides to use browser_navigate tool
+
+    AI-&gt;&gt;Client: Tool call: browser_navigate(url: &quot;example.com&quot;)
+    Client-&gt;&gt;Server: JSON-RPC Request
+    Server-&gt;&gt;Tool: Execute browser navigation
+    Tool--&gt;&gt;Server: Navigation complete
+    Server--&gt;&gt;Client: JSON-RPC Response (success)
+    Client--&gt;&gt;AI: Tool result: &quot;Page loaded&quot;
+
+    Note over AI: Decides to use browser_click tool
+
+    AI-&gt;&gt;Client: Tool call: browser_click(selector: &quot;#login&quot;)
+    Client-&gt;&gt;Server: JSON-RPC Request
+    Server-&gt;&gt;Tool: Execute click
+    Tool--&gt;&gt;Server: Click complete
+    Server--&gt;&gt;Client: JSON-RPC Response (success)
+    Client--&gt;&gt;AI: Tool result: &quot;Clicked login button&quot;
+
+    AI-&gt;&gt;User: &quot;Done! Navigated to example.com and clicked login.&quot;</code></pre>
+<h3>3. Tool Discovery Flow</h3>
+<pre><code>sequenceDiagram
+    participant Host as Host Application
+    participant Client as MCP Client
+    participant Server as MCP Server
+
+    Note over Host,Server: Initialization Phase
+
+    Host-&gt;&gt;Client: Initialize connection to server
+    Client-&gt;&gt;Server: initialize request
+    Server--&gt;&gt;Client: Server capabilities &amp; info
+    Client-&gt;&gt;Server: tools/list request
+    Server--&gt;&gt;Client: Available tools with schemas
+
+    Note over Host: Tools are now registered
+
+    Note over Host,Server: Usage Phase
+
+    Host-&gt;&gt;Client: Call tool &quot;browser_navigate&quot;
+    Client-&gt;&gt;Server: tools/call request
+    Server--&gt;&gt;Client: Tool execution result
+    Client--&gt;&gt;Host: Formatted result</code></pre>
+<h3>4. stdio Transport Architecture</h3>
+<pre><code>┌──────────────────────────────────────┐
+│           Host Process               │
+│  ┌────────────────────────────────┐  │
+│  │         AI Model               │  │
+│  │    (Claude / GPT / etc.)       │  │
+│  └──────────┬─────────────────────┘  │
+│             │                        │
+│  ┌──────────▼─────────────────────┐  │
+│  │       MCP Client               │  │
+│  │  - Serializes requests         │  │
+│  │  - Parses responses            │  │
+│  └──────────┬─────────────────────┘  │
+│             │                        │
+│     ┌───────┴───────┐                │
+│     │ Child Process │                │
+│     │  ┌─────────┐  │                │
+│     │  │   MCP   │  │                │
+│     │  │ Server  │  │                │
+│     │  └─────────┘  │                │
+│     │               │                │
+│     │  stdin ◄──────│── Request      │
+│     │  stdout ──────│──► Response    │
+│     └───────────────┘                │
+└──────────────────────────────────────┘</code></pre>
+<h3>5. HTTP/SSE Transport Architecture</h3>
+<pre><code>┌─────────────────┐          ┌─────────────────────┐
+│  Host Process    │          │   MCP Server         │
+│                  │          │   (Remote Service)   │
+│  ┌────────────┐  │          │                     │
+│  │  AI Model  │  │          │  ┌───────────────┐  │
+│  └─────┬──────┘  │          │  │  Tool Handler  │  │
+│        │         │          │  └───────────────┘  │
+│  ┌─────▼──────┐  │  HTTP    │                     │
+│  │ MCP Client ├──┼──POST───►│  /tools/call        │
+│  │            │  │          │                     │
+│  │            │◄─┼──SSE─────│  Event Stream       │
+│  └────────────┘  │          │                     │
+└─────────────────┘          └─────────────────────┘</code></pre>
+<h3>6. Multiple MCP Servers in Test Automation</h3>
+<pre><code>graph LR
+    subgraph AI_Agent[&quot;AI Agent (Claude Code)&quot;]
+        Brain[&quot;AI Brain&quot;]
+    end
+
+    subgraph MCP_Servers[&quot;Connected MCP Servers&quot;]
+        PW[&quot;Playwright MCP&quot;]
+        JIRA[&quot;Jira MCP&quot;]
+        FS[&quot;File System MCP&quot;]
+        GH[&quot;GitHub MCP&quot;]
+    end
+
+    subgraph Actions[&quot;What Each Server Does&quot;]
+        A1[&quot;Navigate pages\nClick buttons\nFill forms\nTake screenshots&quot;]
+        A2[&quot;Create issues\nSearch tickets\nUpdate status&quot;]
+        A3[&quot;Read files\nWrite reports\nCreate test plans&quot;]
+        A4[&quot;Create PRs\nComment on issues\nRead code&quot;]
+    end
+
+    Brain --&gt; PW --&gt; A1
+    Brain --&gt; JIRA --&gt; A2
+    Brain --&gt; FS --&gt; A3
+    Brain --&gt; GH --&gt; A4</code></pre>
+<h3>7. MCP Message Format (JSON-RPC 2.0)</h3>
+<h3>Tool List Request</h3>
+<pre><code>{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: 1,
+  &quot;method&quot;: &quot;tools/list&quot;
+}</code></pre>
+<h3>Tool List Response</h3>
+<pre><code>{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: 1,
+  &quot;result&quot;: {
+    &quot;tools&quot;: [
+      {
+        &quot;name&quot;: &quot;browser_navigate&quot;,
+        &quot;description&quot;: &quot;Navigate to a URL in the browser&quot;,
+        &quot;inputSchema&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;properties&quot;: {
+            &quot;url&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;URL to navigate to&quot; }
+          },
+          &quot;required&quot;: [&quot;url&quot;]
+        }
+      }
+    ]
+  }
+}</code></pre>
+<h3>Tool Call Request</h3>
+<pre><code>{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: 2,
+  &quot;method&quot;: &quot;tools/call&quot;,
+  &quot;params&quot;: {
+    &quot;name&quot;: &quot;browser_navigate&quot;,
+    &quot;arguments&quot;: {
+      &quot;url&quot;: &quot;https://example.com&quot;
+    }
+  }
+}</code></pre>
+<h3>Tool Call Response</h3>
+<pre><code>{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: 2,
+  &quot;result&quot;: {
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;Navigated to https://example.com&quot;
+      }
+    ]
+  }
+}</code></pre>
+<h3>8. STLC Automation Flow with MCP</h3>
+<pre><code>graph TD
+    A[&quot;Start STLC Pipeline&quot;] --&gt; B[&quot;Phase 1: Test Planning&quot;]
+    B --&gt; |&quot;File MCP: Read template&quot;| C[&quot;Generate Test Plan&quot;]
+    C --&gt; D[&quot;Phase 2: Test Case Design&quot;]
+    D --&gt; |&quot;File MCP: Write document&quot;| E[&quot;Generate Test Cases&quot;]
+    E --&gt; F[&quot;Phase 3: Test Execution&quot;]
+    F --&gt; |&quot;Playwright MCP: Run tests&quot;| G[&quot;Execute 10 Test Cases&quot;]
+    G --&gt; H{&quot;All Tests Pass?&quot;}
+    H --&gt; |&quot;Yes&quot;| I[&quot;Phase 5: Generate Report&quot;]
+    H --&gt; |&quot;No&quot;| J[&quot;Phase 4: Defect Reporting&quot;]
+    J --&gt; |&quot;Jira MCP: Create tickets&quot;| K[&quot;Create Jira Tickets for Failures&quot;]
+    K --&gt; I
+    I --&gt; |&quot;Generate HTML Report&quot;| L[&quot;Open HTML Report&quot;]
+    L --&gt; M[&quot;End STLC Pipeline&quot;]
+
+    style H fill:#ffcc00
+    style J fill:#ff6666
+    style I fill:#66cc66</code></pre>
+<p>This is the exact flow implemented in <span class="inline-code">stlc_project/mcp_scripts/06_full_stlc_pipeline.js</span>.</p>
+</div>
+<div class="topic" id="03-how-playwright-mcp-works">
+<span class="badge badge-learning">Learning</span>
+<h2>How Playwright MCP Works</h2>
+<h2>How Playwright MCP Works</h2>
+<h3>What is Playwright MCP?</h3>
+<p><strong>Playwright MCP</strong> is an MCP server that exposes Playwright's browser automation capabilities as MCP tools. Instead of writing Playwright scripts manually, an AI agent can use these tools to control a browser through natural language instructions.</p>
+<h3>How to Set Up Playwright MCP</h3>
+<h3>Installation</h3>
+<pre><code>npm install @playwright/mcp</code></pre>
+<h3>Configure in Claude Code</h3>
+<p>Add to your MCP settings (<span class="inline-code">.claude/settings.json</span> or project settings):</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;]
+    }
+  }
+}</code></pre>
+<h3>Configure in Claude Desktop</h3>
+<p>Add to <span class="inline-code">claude_desktop_config.json</span>:</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;],
+      &quot;env&quot;: {
+        &quot;DISPLAY&quot;: &quot;:1&quot;
+      }
+    }
+  }
+}</code></pre>
+<h3>Options</h3>
+<pre><code># Run in headed mode (see the browser)
+npx @playwright/mcp --headed
+
+# Use a specific browser
+npx @playwright/mcp --browser firefox
+
+# Set viewport size
+npx @playwright/mcp --viewport-size 1280x720</code></pre>
+<h3>Available Playwright MCP Tools</h3>
+<h3>Navigation Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Key Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td>Navigate to a URL</td>
+<td><span class="inline-code">url</span> (string)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate_back</span></td>
+<td>Go back in history</td>
+<td>none</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td>Wait for condition</td>
+<td><span class="inline-code">time</span> (ms), <span class="inline-code">selector</span>, <span class="inline-code">state</span></td>
+</tr>
+</table>
+<h3>Interaction Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Key Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td>Click an element</td>
+<td><span class="inline-code">element</span> (description), <span class="inline-code">ref</span> (element ref)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_fill_form</span></td>
+<td>Fill form fields</td>
+<td><span class="inline-code">ref</span>, <span class="inline-code">value</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td>Select dropdown option</td>
+<td><span class="inline-code">ref</span>, <span class="inline-code">values</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td>Hover over element</td>
+<td><span class="inline-code">element</span>, <span class="inline-code">ref</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_drag</span></td>
+<td>Drag and drop</td>
+<td><span class="inline-code">startRef</span>, <span class="inline-code">endRef</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td>Type text character by character</td>
+<td><span class="inline-code">text</span>, <span class="inline-code">submit</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td>Press a keyboard key</td>
+<td><span class="inline-code">key</span> (e.g., "Enter", "Tab")</td>
+</tr>
+</table>
+<h3>Information Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Key Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Get accessibility tree snapshot</td>
+<td>none</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td>Capture screenshot</td>
+<td><span class="inline-code">raw</span> (boolean)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>Get console logs</td>
+<td>none</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>Get network activity</td>
+<td>none</td>
+</tr>
+</table>
+<h3>Form & File Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Key Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_file_upload</span></td>
+<td>Upload a file</td>
+<td><span class="inline-code">paths</span> (file paths)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_handle_dialog</span></td>
+<td>Accept/dismiss dialogs</td>
+<td><span class="inline-code">accept</span> (boolean), <span class="inline-code">promptText</span></td>
+</tr>
+</table>
+<h3>Advanced Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Key Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td>Run JavaScript in page</td>
+<td><span class="inline-code">expression</span> (JS code)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_run_code</span></td>
+<td>Run Playwright code snippet</td>
+<td><span class="inline-code">code</span> (Playwright script)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_tabs</span></td>
+<td>List open tabs</td>
+<td>none</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_resize</span></td>
+<td>Resize browser window</td>
+<td><span class="inline-code">width</span>, <span class="inline-code">height</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_close</span></td>
+<td>Close the browser</td>
+<td>none</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_install</span></td>
+<td>Install browser binaries</td>
+<td>none</td>
+</tr>
+</table>
+<h3>How It Works: Step by Step</h3>
+<h3>Example: Testing a Login Flow</h3>
+<p>When you tell Claude "Test the login on the-internet.herokuapp.com", here's what happens:</p>
+<p><strong>Step 1: AI decides to navigate</strong></p>
+<pre><code>AI thinks: &quot;I need to go to the login page first&quot;
+AI calls: browser_navigate(url: &quot;https://the-internet.herokuapp.com/login&quot;)</code></pre>
+<p><strong>Step 2: AI takes a snapshot to see the page</strong></p>
+<pre><code>AI calls: browser_snapshot()
+Result: Shows form with username field, password field, login button</code></pre>
+<p><strong>Step 3: AI fills the form</strong></p>
+<pre><code>AI calls: browser_fill_form(ref: &quot;username_field_ref&quot;, value: &quot;tomsmith&quot;)
+AI calls: browser_fill_form(ref: &quot;password_field_ref&quot;, value: &quot;SuperSecretPassword!&quot;)</code></pre>
+<p><strong>Step 4: AI clicks login</strong></p>
+<pre><code>AI calls: browser_click(ref: &quot;login_button_ref&quot;)</code></pre>
+<p><strong>Step 5: AI verifies the result</strong></p>
+<pre><code>AI calls: browser_snapshot()
+Result: Shows &quot;You logged into a secure area!&quot; message</code></pre>
+<h3>Snapshot vs Screenshot</h3>
+<h3>Snapshot (<span class="inline-code">browser_snapshot</span>)</h3>
+<ul>
+<li>Returns the <strong>accessibility tree</strong> (text-based DOM structure)</li>
+<li>AI can "read" the page structure</li>
+<li>Provides element <strong>refs</strong> for interaction</li>
+<li>Fast and lightweight</li>
+<li><strong>Best for</strong>: Finding elements, reading content, getting refs</li>
+</ul>
+<h3>Screenshot (<span class="inline-code">browser_take_screenshot</span>)</h3>
+<ul>
+<li>Returns a <strong>visual image</strong> of the page</li>
+<li>AI can "see" the page visually</li>
+<li>Useful for visual verification</li>
+<li>Slower and larger payload</li>
+<li><strong>Best for</strong>: Visual checks, debugging layout issues</li>
+</ul>
+<h3>Playwright MCP vs Direct Playwright Scripts</h3>
+<table>
+<tr>
+<th>Aspect</th>
+<th>Direct Playwright</th>
+<th>Playwright MCP</th>
+</tr>
+<tr>
+<td><strong>Who writes code</strong></td>
+<td>Developer</td>
+<td>AI agent</td>
+</tr>
+<tr>
+<td><strong>Flexibility</strong></td>
+<td>Fixed script</td>
+<td>Dynamic decisions</td>
+</tr>
+<tr>
+<td><strong>Error handling</strong></td>
+<td>Pre-coded</td>
+<td>AI adapts in real-time</td>
+</tr>
+<tr>
+<td><strong>Setup</strong></td>
+<td>Write test files</td>
+<td>Configure MCP server</td>
+</tr>
+<tr>
+<td><strong>Maintenance</strong></td>
+<td>Update scripts manually</td>
+<td>AI adjusts automatically</td>
+</tr>
+<tr>
+<td><strong>Speed</strong></td>
+<td>Faster (no AI overhead)</td>
+<td>Slower (AI reasoning)</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>CI/CD pipelines</td>
+<td>Exploratory testing, one-off tasks</td>
+</tr>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>Deterministic</td>
+<td>May vary between runs</td>
+</tr>
+</table>
+<h3>When to Use Each</h3>
+<p><strong>Use Direct Playwright when:</strong></p>
+<ul>
+<li>Running tests in CI/CD pipelines</li>
+<li>You need deterministic, repeatable tests</li>
+<li>Performance matters</li>
+<li>Tests are well-defined and stable</li>
+</ul>
+<p><strong>Use Playwright MCP when:</strong></p>
+<ul>
+<li>Doing exploratory testing</li>
+<li>Testing dynamic or changing UIs</li>
+<li>You want AI to discover and test features</li>
+<li>Creating initial test automation (then convert to scripts)</li>
+<li>Non-technical team members need to run tests</li>
+</ul>
+<h3>Real-World Example: AI Agent Testing a Todo App</h3>
+<pre><code>User: &quot;Test the todo app at todoapp.com&quot;
+
+AI Agent&#x27;s Actions:
+1. browser_navigate(&quot;https://todoapp.com&quot;)
+2. browser_snapshot() -&gt; sees input field and empty list
+3. browser_fill_form(input_ref, &quot;Buy groceries&quot;)
+4. browser_press_key(&quot;Enter&quot;)
+5. browser_snapshot() -&gt; sees &quot;Buy groceries&quot; in the list
+6. browser_fill_form(input_ref, &quot;Walk the dog&quot;)
+7. browser_press_key(&quot;Enter&quot;)
+8. browser_snapshot() -&gt; sees both items
+9. browser_click(checkbox_ref) -&gt; marks first item done
+10. browser_snapshot() -&gt; verifies item is crossed out
+11. browser_take_screenshot() -&gt; visual proof
+
+AI Agent: &quot;I tested the todo app. I was able to:
+- Add items (Buy groceries, Walk the dog)
+- Mark items as complete
+- Verify the UI updates correctly
+See the screenshot for visual confirmation.&quot;</code></pre>
+<h3>Security Considerations</h3>
+<ul>
+<li>Playwright MCP runs a real browser - it can access any URL</li>
+<li>Be careful with credentials (use environment variables)</li>
+<li>The AI agent can see page content including sensitive data</li>
+<li>Use headed mode during development to monitor actions</li>
+<li>In CI/CD, run in headless mode with restricted network access</li>
+</ul>
+<h3>Summary</h3>
+<ul>
+<li>Playwright MCP turns browser automation into MCP tools</li>
+<li>AI agents use <span class="inline-code">browser_snapshot</span> to "see" pages and get element refs</li>
+<li>They use <span class="inline-code">browser_click</span>, <span class="inline-code">browser_fill_form</span> etc. to interact</li>
+<li>It's best for exploratory testing and AI-driven test automation</li>
+<li>Direct Playwright scripts are still better for CI/CD pipelines</li>
+</ul>
+</div>
+<div class="topic" id="04-jira-mcp-overview">
+<span class="badge badge-learning">Learning</span>
+<h2>Jira MCP Overview</h2>
+<h2>Jira MCP Overview</h2>
+<h3>What is Jira MCP?</h3>
+<p><strong>Jira MCP</strong> is an MCP server that exposes Jira's issue tracking capabilities as tools that an AI agent can use. It enables automatic defect reporting, issue searching, and project management through MCP.</p>
+<h3>Why Jira MCP for Test Automation?</h3>
+<p>In a typical STLC, when tests fail:</p>
+<ol>
+<li>QA manually reviews the failure</li>
+<li>QA creates a Jira ticket with details</li>
+<li>QA assigns the ticket and sets priority</li>
+<li>This process repeats for every failure</li>
+</ol>
+<p><strong>With Jira MCP:</strong></p>
+<ol>
+<li>Tests run automatically</li>
+<li>AI agent detects failures</li>
+<li>AI creates Jira tickets instantly with full context</li>
+<li>AI can even suggest priority based on error type</li>
+</ol>
+<h3>Conceptual Jira MCP Tools</h3>
+<p>A Jira MCP server would expose these tools:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Parameters</th>
+</tr>
+<tr>
+<td><span class="inline-code">create_issue</span></td>
+<td>Create a new Jira issue</td>
+<td><span class="inline-code">project</span>, <span class="inline-code">summary</span>, <span class="inline-code">description</span>, <span class="inline-code">type</span>, <span class="inline-code">priority</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">search_issues</span></td>
+<td>Search issues with JQL</td>
+<td><span class="inline-code">jql</span>, <span class="inline-code">maxResults</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">get_issue</span></td>
+<td>Get issue details</td>
+<td><span class="inline-code">issueKey</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">update_issue</span></td>
+<td>Update an existing issue</td>
+<td><span class="inline-code">issueKey</span>, <span class="inline-code">fields</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">add_comment</span></td>
+<td>Add comment to issue</td>
+<td><span class="inline-code">issueKey</span>, <span class="inline-code">body</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">transition_issue</span></td>
+<td>Change issue status</td>
+<td><span class="inline-code">issueKey</span>, <span class="inline-code">transition</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">assign_issue</span></td>
+<td>Assign issue to user</td>
+<td><span class="inline-code">issueKey</span>, <span class="inline-code">accountId</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">attach_file</span></td>
+<td>Attach file to issue</td>
+<td><span class="inline-code">issueKey</span>, <span class="inline-code">filePath</span></td>
+</tr>
+</table>
+<h3>Setting Up Jira MCP</h3>
+<h3>Option 1: Using an Existing Jira MCP Package</h3>
+<p>Several community MCP servers exist for Jira:</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;jira&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@anthropic/jira-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;JIRA_URL&quot;: &quot;https://your-company.atlassian.net&quot;,
+        &quot;JIRA_EMAIL&quot;: &quot;your-email@company.com&quot;,
+        &quot;JIRA_API_TOKEN&quot;: &quot;your-api-token&quot;
+      }
+    }
+  }
+}</code></pre>
+<h3>Option 2: Using Jira REST API Directly</h3>
+<p>If no MCP server is available, you can use Jira's REST API:</p>
+<pre><code>// Create an issue via Jira REST API
+const response = await fetch(&#x27;https://your-company.atlassian.net/rest/api/2/issue&#x27;, {
+  method: &#x27;POST&#x27;,
+  headers: {
+    &#x27;Authorization&#x27;: `Basic ${Buffer.from(`${email}:${apiToken}`).toString(&#x27;base64&#x27;)}`,
+    &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+  },
+  body: JSON.stringify({
+    fields: {
+      project: { key: &#x27;STLC&#x27; },
+      summary: &#x27;Test Failure: Login page title mismatch&#x27;,
+      description: &#x27;Expected: &quot;Login Page&quot;\nActual: &quot;Wrong Title&quot;\nTest: 08_wrong_title.spec.js&#x27;,
+      issuetype: { name: &#x27;Bug&#x27; },
+      priority: { name: &#x27;High&#x27; },
+    },
+  }),
+});</code></pre>
+<h3>Option 3: Mock Jira Server (Used in This Project)</h3>
+<p>For learning and development, we use a mock Jira server:</p>
+<pre><code># Start the mock server
+node stlc_project/jira_mock/jira_mock_server.js
+
+# It runs on http://localhost:3001
+# Supports the same REST API endpoints as real Jira</code></pre>
+<p>See <span class="inline-code">stlc_project/jira_mock/README.md</span> for details.</p>
+<h3>Getting a Jira API Token</h3>
+<ol>
+<li>Go to https://id.atlassian.com/manage-profile/security/api-tokens</li>
+<li>Click "Create API token"</li>
+<li>Give it a label (e.g., "MCP Integration")</li>
+<li>Copy the token</li>
+<li>Set environment variables:</li>
+</ol>
+<pre><code>   export JIRA_URL=&quot;https://your-company.atlassian.net&quot;
+   export JIRA_EMAIL=&quot;your-email@company.com&quot;
+   export JIRA_API_TOKEN=&quot;your-token-here&quot;</code></pre>
+<h3>How Jira MCP Fits in STLC</h3>
+<pre><code>Test Execution (Playwright MCP)
+        │
+        ▼
+   Tests Fail
+        │
+        ▼
+Parse Failure Details
+   - Test name
+   - Error message
+   - Screenshot path
+   - Stack trace
+        │
+        ▼
+Create Jira Ticket (Jira MCP)
+   - Summary: &quot;Test Failure: {test name}&quot;
+   - Description: Full error details
+   - Type: Bug
+   - Priority: Based on severity
+   - Attachments: Screenshots
+        │
+        ▼
+Ticket Created: STLC-123</code></pre>
+<h3>Mapping Test Failures to Jira Fields</h3>
+<table>
+<tr>
+<th>Test Failure Info</th>
+<th>Jira Field</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>Test name</td>
+<td>Summary</td>
+<td>"Test Failure: Login page title mismatch"</td>
+</tr>
+<tr>
+<td>Error + stack trace</td>
+<td>Description</td>
+<td>Full error details with formatting</td>
+</tr>
+<tr>
+<td>Test category</td>
+<td>Labels</td>
+<td>["automation", "regression"]</td>
+</tr>
+<tr>
+<td>Failure screenshot</td>
+<td>Attachment</td>
+<td><span class="inline-code">test-results/screenshot.png</span></td>
+</tr>
+<tr>
+<td>First failure</td>
+<td>Priority</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Flaky/intermittent</td>
+<td>Priority</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Test file path</td>
+<td>Custom Field</td>
+<td><span class="inline-code">tests/08_wrong_title.spec.js</span></td>
+</tr>
+</table>
+<h3>Best Practices</h3>
+<ol>
+<li><strong>Check for duplicates</strong> before creating tickets - search JQL for similar issues</li>
+<li><strong>Include context</strong> - error messages, screenshots, steps to reproduce</li>
+<li><strong>Set appropriate priority</strong> - not every test failure is critical</li>
+<li><strong>Link related tickets</strong> - if multiple tests fail from the same cause</li>
+<li><strong>Auto-close tickets</strong> - when tests pass again in the next run</li>
+<li><strong>Use labels</strong> - tag tickets as "automation-reported" for easy filtering</li>
+</ol>
+<h3>Summary</h3>
+<ul>
+<li>Jira MCP automates defect reporting from test failures</li>
+<li>It uses the same REST API as Jira Cloud</li>
+<li>Our project uses a mock server for learning (zero setup required)</li>
+<li>The mock can be swapped for real Jira by changing env variables</li>
+</ul>
+</div>
+<div class="topic" id="05-document-creation-mcp">
+<span class="badge badge-learning">Learning</span>
+<h2>Document Creation MCP</h2>
+<h2>Document Creation with MCP</h2>
+<h3>Overview</h3>
+<p>In STLC automation, we need to generate structured documents like <strong>test plans</strong> and <strong>test cases</strong>. MCP enables AI agents to create, read, and modify these documents programmatically.</p>
+<h3>How Document Creation Works with MCP</h3>
+<h3>The Approach: Template-Based Generation</h3>
+<p>Instead of writing documents from scratch, we use a template-based approach:</p>
+<ol>
+<li><strong>Define templates</strong> with placeholders (e.g., <span class="inline-code">{{PROJECT_NAME}}</span>, <span class="inline-code">{{TEST_CASES}}</span>)</li>
+<li><strong>AI agent reads</strong> the template via file system tools</li>
+<li><strong>AI populates</strong> the template with project-specific data</li>
+<li><strong>AI writes</strong> the final document to the output location</li>
+</ol>
+<pre><code>Template (test_plan_template.md)
+        │
+        ▼
+   AI Agent reads template
+   AI Agent populates data
+        │
+        ▼
+Final Document (test_plan.md)</code></pre>
+<h3>MCP Tools for Document Operations</h3>
+<h3>File System MCP Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Usage</th>
+</tr>
+<tr>
+<td><span class="inline-code">read_file</span></td>
+<td>Read file contents</td>
+<td>Read templates</td>
+</tr>
+<tr>
+<td><span class="inline-code">write_file</span></td>
+<td>Write/create files</td>
+<td>Create documents</td>
+</tr>
+<tr>
+<td><span class="inline-code">list_directory</span></td>
+<td>List files in folder</td>
+<td>Find templates</td>
+</tr>
+<tr>
+<td><span class="inline-code">search_files</span></td>
+<td>Search file contents</td>
+<td>Find specific data</td>
+</tr>
+</table>
+<h3>Using Claude Code for Document Generation</h3>
+<p>In Claude Code, document operations are built-in:</p>
+<pre><code>User: &quot;Create a test plan for the login feature based on the template&quot;
+
+Claude Code:
+1. Reads templates/test_plan_template.md (Read tool)
+2. Populates with login feature specifics
+3. Writes documents/test_plan.md (Write tool)</code></pre>
+<h3>Template Design Principles</h3>
+<h3>Good Template Structure</h3>
+<pre><code># Test Plan: {{PROJECT_NAME}}
+
+## 1. Introduction
+**Project:** {{PROJECT_NAME}}
+**Version:** {{VERSION}}
+**Author:** {{AUTHOR}}
+**Date:** {{DATE}}
+
+## 2. Scope
+{{SCOPE_DESCRIPTION}}
+
+## 3. Test Cases
+{{TEST_CASES_TABLE}}
+
+## 4. Schedule
+{{SCHEDULE}}</code></pre>
+<h3>Template Placeholders</h3>
+<table>
+<tr>
+<th>Placeholder</th>
+<th>Description</th>
+<th>Example Value</th>
+</tr>
+<tr>
+<td><span class="inline-code">{{PROJECT_NAME}}</span></td>
+<td>Name of the project</td>
+<td>"The Internet App"</td>
+</tr>
+<tr>
+<td><span class="inline-code">{{VERSION}}</span></td>
+<td>Document version</td>
+<td>"1.0"</td>
+</tr>
+<tr>
+<td><span class="inline-code">{{AUTHOR}}</span></td>
+<td>Author name</td>
+<td>"QA Automation Team"</td>
+</tr>
+<tr>
+<td><span class="inline-code">{{DATE}}</span></td>
+<td>Creation date</td>
+<td>"2026-03-17"</td>
+</tr>
+<tr>
+<td><span class="inline-code">{{TEST_CASES_TABLE}}</span></td>
+<td>Generated test case table</td>
+<td>Markdown table</td>
+</tr>
+<tr>
+<td><span class="inline-code">{{SCOPE_DESCRIPTION}}</span></td>
+<td>What's being tested</td>
+<td>Feature descriptions</td>
+</tr>
+</table>
+<h3>Document Types in STLC</h3>
+<h3>1. Test Plan Document</h3>
+<p>Contains:</p>
+<ul>
+<li>Project overview and objectives</li>
+<li>Scope (in-scope and out-of-scope)</li>
+<li>Test strategy and approach</li>
+<li>Test environment details</li>
+<li>Entry and exit criteria</li>
+<li>Risk assessment</li>
+<li>Schedule and milestones</li>
+</ul>
+<h3>2. Test Case Document</h3>
+<p>Contains:</p>
+<ul>
+<li>Test case ID and title</li>
+<li>Preconditions</li>
+<li>Test steps</li>
+<li>Expected results</li>
+<li>Actual results (after execution)</li>
+<li>Pass/Fail status</li>
+<li>Priority and category</li>
+</ul>
+<h3>3. Test Report Document</h3>
+<p>Contains:</p>
+<ul>
+<li>Execution summary</li>
+<li>Pass/fail statistics</li>
+<li>Failed test details</li>
+<li>Defects raised</li>
+<li>Screenshots and evidence</li>
+<li>Recommendations</li>
+</ul>
+<h3>How Our STLC Project Uses Document MCP</h3>
+<h3>Script: <span class="inline-code">01_generate_test_plan.js</span></h3>
+<pre><code>// 1. Read the template
+const template = fs.readFileSync(&#x27;templates/test_plan_template.md&#x27;, &#x27;utf-8&#x27;);
+
+// 2. Replace placeholders with project data
+const testPlan = template
+  .replace(&#x27;{{PROJECT_NAME}}&#x27;, config.app.name)
+  .replace(&#x27;{{DATE}}&#x27;, new Date().toISOString().split(&#x27;T&#x27;)[0])
+  // ... more replacements
+
+// 3. Write the final document
+fs.writeFileSync(&#x27;documents/test_plan.md&#x27;, testPlan);</code></pre>
+<h3>Script: <span class="inline-code">02_generate_test_cases.js</span></h3>
+<pre><code>// Generates a markdown table of test cases
+const testCases = [
+  { id: &#x27;TC-001&#x27;, title: &#x27;Homepage loads correctly&#x27;, priority: &#x27;High&#x27; },
+  // ... more test cases
+];
+
+// Creates formatted markdown document
+const document = generateTestCaseDocument(testCases);
+fs.writeFileSync(&#x27;documents/test_cases.md&#x27;, document);</code></pre>
+<h3>Other Document MCPs</h3>
+<h3>Google Docs MCP</h3>
+<ul>
+<li>Create and edit Google Docs</li>
+<li>Useful for shared team documents</li>
+<li>Real-time collaboration</li>
+</ul>
+<h3>Confluence MCP</h3>
+<ul>
+<li>Create pages in Confluence</li>
+<li>Common in enterprise environments</li>
+<li>Links with Jira issues</li>
+</ul>
+<h3>Markdown File System</h3>
+<ul>
+<li>Simplest approach (what we use)</li>
+<li>Version-controlled with git</li>
+<li>No external dependencies</li>
+</ul>
+<h3>Summary</h3>
+<ul>
+<li>Documents in STLC can be generated from templates</li>
+<li>MCP file tools enable AI to read templates and write documents</li>
+<li>Our project uses simple markdown templates with placeholder replacement</li>
+<li>This approach works locally and can be extended to cloud document services</li>
+</ul>
+</div>
+<div class="topic" id="06-simple-mcp-example">
+<span class="badge badge-learning">Learning</span>
+<h2>Simple MCP Example</h2>
+<pre><code>/**
+ * Simple MCP Server Example
+ *
+ * This file demonstrates how to create a minimal MCP server
+ * using the @modelcontextprotocol/sdk package.
+ *
+ * SETUP:
+ *   npm install @modelcontextprotocol/sdk
+ *
+ * RUN:
+ *   This server is meant to be launched by an MCP host (like Claude Code).
+ *   To test it standalone, you can pipe JSON-RPC messages to stdin.
+ *
+ * WHAT IT DOES:
+ *   Exposes two simple tools:
+ *   1. greet - Returns a greeting message
+ *   2. calculate - Performs basic math operations
+ */
+
+// ============================================================
+// PART 1: Understanding MCP Server Structure
+// ============================================================
+
+/**
+ * An MCP Server has three main components:
+ *
+ * 1. Server Definition - name, version, capabilities
+ * 2. Tool Registration - define what tools are available
+ * 3. Tool Handlers - implement the logic for each tool
+ *
+ * The flow is:
+ *   Host connects -&gt; Server lists tools -&gt; Host calls tools -&gt; Server returns results
+ */
+
+// ============================================================
+// PART 2: The MCP Server Code
+// ============================================================
+
+/*
+ * Below is the complete code for a simple MCP server.
+ * Uncomment and run after installing @modelcontextprotocol/sdk
+ */
+
+/*
+const { McpServer } = require(&#x27;@modelcontextprotocol/sdk/server/mcp.js&#x27;);
+const { StdioServerTransport } = require(&#x27;@modelcontextprotocol/sdk/server/stdio.js&#x27;);
+const { z } = require(&#x27;zod&#x27;);
+
+// Step 1: Create the MCP Server
+const server = new McpServer({
+  name: &#x27;simple-example-server&#x27;,
+  version: &#x27;1.0.0&#x27;,
+});
+
+// Step 2: Register Tool - &quot;greet&quot;
+server.tool(
+  &#x27;greet&#x27;,                              // Tool name
+  &#x27;Generate a greeting message&#x27;,         // Tool description
+  {                                      // Input schema (using Zod)
+    name: z.string().describe(&#x27;Name of the person to greet&#x27;),
+    style: z.enum([&#x27;formal&#x27;, &#x27;casual&#x27;]).optional().describe(&#x27;Greeting style&#x27;),
+  },
+  async ({ name, style }) =&gt; {           // Tool handler
+    const greeting = style === &#x27;formal&#x27;
+      ? `Good day, ${name}. How may I assist you?`
+      : `Hey ${name}! What&#x27;s up?`;
+
+    return {
+      content: [
+        { type: &#x27;text&#x27;, text: greeting }
+      ],
+    };
+  }
+);
+
+// Step 3: Register Tool - &quot;calculate&quot;
+server.tool(
+  &#x27;calculate&#x27;,
+  &#x27;Perform a basic math calculation&#x27;,
+  {
+    operation: z.enum([&#x27;add&#x27;, &#x27;subtract&#x27;, &#x27;multiply&#x27;, &#x27;divide&#x27;]).describe(&#x27;Math operation&#x27;),
+    a: z.number().describe(&#x27;First number&#x27;),
+    b: z.number().describe(&#x27;Second number&#x27;),
+  },
+  async ({ operation, a, b }) =&gt; {
+    let result;
+    switch (operation) {
+      case &#x27;add&#x27;:      result = a + b; break;
+      case &#x27;subtract&#x27;: result = a - b; break;
+      case &#x27;multiply&#x27;: result = a * b; break;
+      case &#x27;divide&#x27;:
+        if (b === 0) {
+          return {
+            content: [{ type: &#x27;text&#x27;, text: &#x27;Error: Division by zero&#x27; }],
+            isError: true,
+          };
+        }
+        result = a / b;
+        break;
+    }
+
+    return {
+      content: [
+        { type: &#x27;text&#x27;, text: `${a} ${operation} ${b} = ${result}` }
+      ],
+    };
+  }
+);
+
+// Step 4: Start the server with stdio transport
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error(&#x27;Simple MCP Server running on stdio&#x27;);
+}
+
+main().catch(console.error);
+*/
+
+// ============================================================
+// PART 3: How to Use This Server
+// ============================================================
+
+/**
+ * To use this MCP server with Claude Code:
+ *
+ * 1. Save this file and install dependencies:
+ *    npm install @modelcontextprotocol/sdk zod
+ *
+ * 2. Add to your Claude Code MCP settings:
+ *    {
+ *      &quot;mcpServers&quot;: {
+ *        &quot;simple-example&quot;: {
+ *          &quot;command&quot;: &quot;node&quot;,
+ *          &quot;args&quot;: [&quot;path/to/06_Simple_MCP_Example.js&quot;]
+ *        }
+ *      }
+ *    }
+ *
+ * 3. In Claude Code, you can now use:
+ *    - &quot;Greet John formally&quot; -&gt; calls greet(name: &quot;John&quot;, style: &quot;formal&quot;)
+ *    - &quot;Calculate 42 + 58&quot; -&gt; calls calculate(operation: &quot;add&quot;, a: 42, b: 58)
+ */
+
+// ============================================================
+// PART 4: Simulated Demo (runs without MCP SDK)
+// ============================================================
+
+/**
+ * Since the MCP SDK may not be installed, here&#x27;s a runnable
+ * simulation showing the tool call flow.
+ */
+
+function simulateMCPServer() {
+  console.log(&#x27;=== MCP Server Simulation ===\n&#x27;);
+
+  // Simulate tool registration
+  const tools = {
+    greet: {
+      name: &#x27;greet&#x27;,
+      description: &#x27;Generate a greeting message&#x27;,
+      inputSchema: {
+        type: &#x27;object&#x27;,
+        properties: {
+          name: { type: &#x27;string&#x27;, description: &#x27;Name of the person to greet&#x27; },
+          style: { type: &#x27;string&#x27;, enum: [&#x27;formal&#x27;, &#x27;casual&#x27;], description: &#x27;Greeting style&#x27; },
+        },
+        required: [&#x27;name&#x27;],
+      },
+      handler: ({ name, style }) =&gt; {
+        return style === &#x27;formal&#x27;
+          ? `Good day, ${name}. How may I assist you?`
+          : `Hey ${name}! What&#x27;s up?`;
+      },
+    },
+    calculate: {
+      name: &#x27;calculate&#x27;,
+      description: &#x27;Perform a basic math calculation&#x27;,
+      inputSchema: {
+        type: &#x27;object&#x27;,
+        properties: {
+          operation: { type: &#x27;string&#x27;, enum: [&#x27;add&#x27;, &#x27;subtract&#x27;, &#x27;multiply&#x27;, &#x27;divide&#x27;] },
+          a: { type: &#x27;number&#x27; },
+          b: { type: &#x27;number&#x27; },
+        },
+        required: [&#x27;operation&#x27;, &#x27;a&#x27;, &#x27;b&#x27;],
+      },
+      handler: ({ operation, a, b }) =&gt; {
+        const ops = { add: (a, b) =&gt; a + b, subtract: (a, b) =&gt; a - b, multiply: (a, b) =&gt; a * b, divide: (a, b) =&gt; b !== 0 ? a / b : &#x27;Error: Division by zero&#x27; };
+        return `${a} ${operation} ${b} = ${ops[operation](a, b)}`;
+      },
+    },
+  };
+
+  // Step 1: Tool Discovery
+  console.log(&#x27;Step 1: Tool Discovery (tools/list)&#x27;);
+  console.log(&#x27;Request:  { method: &quot;tools/list&quot; }&#x27;);
+  console.log(&#x27;Response:&#x27;, JSON.stringify(Object.values(tools).map(t =&gt; ({
+    name: t.name,
+    description: t.description,
+  })), null, 2));
+  console.log();
+
+  // Step 2: Tool Call - Greet
+  console.log(&#x27;Step 2: Tool Call - greet&#x27;);
+  console.log(&#x27;Request:  { method: &quot;tools/call&quot;, params: { name: &quot;greet&quot;, arguments: { name: &quot;Pramod&quot;, style: &quot;formal&quot; } } }&#x27;);
+  const greetResult = tools.greet.handler({ name: &#x27;Pramod&#x27;, style: &#x27;formal&#x27; });
+  console.log(&#x27;Response:&#x27;, greetResult);
+  console.log();
+
+  // Step 3: Tool Call - Calculate
+  console.log(&#x27;Step 3: Tool Call - calculate&#x27;);
+  console.log(&#x27;Request:  { method: &quot;tools/call&quot;, params: { name: &quot;calculate&quot;, arguments: { operation: &quot;multiply&quot;, a: 7, b: 6 } } }&#x27;);
+  const calcResult = tools.calculate.handler({ operation: &#x27;multiply&#x27;, a: 7, b: 6 });
+  console.log(&#x27;Response:&#x27;, calcResult);
+  console.log();
+
+  console.log(&#x27;=== Simulation Complete ===&#x27;);
+  console.log(&#x27;\nThis demonstrates the MCP flow:&#x27;);
+  console.log(&#x27;1. Host asks server for available tools&#x27;);
+  console.log(&#x27;2. Host sends tool call requests with arguments&#x27;);
+  console.log(&#x27;3. Server executes the tool and returns results&#x27;);
+}
+
+// Run the simulation
+simulateMCPServer();
+</code></pre>
+</div>
+<div class="topic" id="07-mcp-flow-diagrams">
+<span class="badge badge-learning">Learning</span>
+<h2>MCP Flow Diagrams</h2>
+<h2>MCP Flow Diagrams</h2>
+<h3>1. Complete STLC Pipeline with MCP</h3>
+<pre><code>flowchart TD
+    START([Start STLC Pipeline]) --&gt; PLAN
+
+    subgraph PLAN[&quot;Phase 1: Test Planning&quot;]
+        P1[Read test plan template] --&gt; P2[Populate with project data]
+        P2 --&gt; P3[Write test_plan.md]
+    end
+
+    PLAN --&gt; DESIGN
+
+    subgraph DESIGN[&quot;Phase 2: Test Case Design&quot;]
+        D1[Read test case template] --&gt; D2[Generate test cases from requirements]
+        D2 --&gt; D3[Write test_cases.md]
+    end
+
+    DESIGN --&gt; EXEC
+
+    subgraph EXEC[&quot;Phase 3: Test Execution&quot;]
+        E1[Run Playwright tests] --&gt; E2[Capture results as JSON]
+        E2 --&gt; E3[Generate HTML report]
+    end
+
+    EXEC --&gt; ANALYZE
+
+    subgraph ANALYZE[&quot;Phase 4: Result Analysis&quot;]
+        E3 --&gt; A1{All tests passed?}
+        A1 --&gt;|Yes| REPORT
+        A1 --&gt;|No| DEFECT
+    end
+
+    subgraph DEFECT[&quot;Phase 5: Defect Reporting&quot;]
+        DF1[Parse failure details] --&gt; DF2[Create Jira tickets]
+        DF2 --&gt; DF3[Attach screenshots]
+    end
+
+    DEFECT --&gt; REPORT
+
+    subgraph REPORT[&quot;Phase 6: Reporting&quot;]
+        R1[Compile execution summary]
+        R2[Open HTML report]
+    end
+
+    REPORT --&gt; END([Pipeline Complete])
+
+    style START fill:#4CAF50,color:#fff
+    style END fill:#4CAF50,color:#fff
+    style DEFECT fill:#ff6b6b,color:#fff</code></pre>
+<h3>2. MCP Tool Call Flow</h3>
+<pre><code>sequenceDiagram
+    participant U as User
+    participant H as Host (Claude Code)
+    participant C as MCP Client
+    participant S as MCP Server
+    participant B as Browser/Tool
+
+    U-&gt;&gt;H: &quot;Test the login page&quot;
+
+    rect rgb(230, 245, 255)
+        Note over H,S: Tool Discovery (happens once at startup)
+        H-&gt;&gt;C: Connect to Playwright MCP
+        C-&gt;&gt;S: initialize
+        S--&gt;&gt;C: capabilities
+        C-&gt;&gt;S: tools/list
+        S--&gt;&gt;C: [browser_navigate, browser_click, ...]
+    end
+
+    rect rgb(255, 245, 230)
+        Note over H,B: Navigation
+        H-&gt;&gt;C: browser_navigate(&quot;/login&quot;)
+        C-&gt;&gt;S: tools/call
+        S-&gt;&gt;B: page.goto(&quot;/login&quot;)
+        B--&gt;&gt;S: Page loaded
+        S--&gt;&gt;C: Result
+        C--&gt;&gt;H: &quot;Navigated to /login&quot;
+    end
+
+    rect rgb(230, 255, 230)
+        Note over H,B: Interaction
+        H-&gt;&gt;C: browser_snapshot()
+        C-&gt;&gt;S: tools/call
+        S-&gt;&gt;B: page.accessibility.snapshot()
+        B--&gt;&gt;S: DOM tree
+        S--&gt;&gt;C: Accessibility tree
+        C--&gt;&gt;H: Form fields and refs
+
+        H-&gt;&gt;C: browser_fill_form(username, &quot;tomsmith&quot;)
+        C-&gt;&gt;S: tools/call
+        S-&gt;&gt;B: page.fill(&quot;#username&quot;, &quot;tomsmith&quot;)
+        B--&gt;&gt;S: Filled
+        S--&gt;&gt;C: Result
+        C--&gt;&gt;H: &quot;Filled username&quot;
+    end
+
+    H-&gt;&gt;U: &quot;Login test complete - PASSED&quot;</code></pre>
+<h3>3. Failure Detection and Jira Ticket Flow</h3>
+<pre><code>flowchart LR
+    subgraph TestExecution[&quot;Test Execution&quot;]
+        T1[Test 1: PASS] --&gt; R
+        T2[Test 2: PASS] --&gt; R
+        T3[Test 3: FAIL] --&gt; R
+        T4[Test 4: PASS] --&gt; R
+        T5[Test 5: FAIL] --&gt; R
+        R[Results JSON]
+    end
+
+    subgraph Parsing[&quot;Parse Results&quot;]
+        R --&gt; P[Read results.json]
+        P --&gt; F{Filter failures}
+        F --&gt; F1[Failure 1:\nTest 3 details]
+        F --&gt; F2[Failure 2:\nTest 5 details]
+    end
+
+    subgraph JiraCreation[&quot;Jira Ticket Creation&quot;]
+        F1 --&gt; J1[Create STLC-1:\nTest 3 bug report]
+        F2 --&gt; J2[Create STLC-2:\nTest 5 bug report]
+    end
+
+    subgraph Output[&quot;Output&quot;]
+        J1 --&gt; SUM[Summary:\n2 tickets created\nSTLC-1, STLC-2]
+        J2 --&gt; SUM
+    end
+
+    style T3 fill:#ff6b6b,color:#fff
+    style T5 fill:#ff6b6b,color:#fff
+    style T1 fill:#4CAF50,color:#fff
+    style T2 fill:#4CAF50,color:#fff
+    style T4 fill:#4CAF50,color:#fff</code></pre>
+<h3>4. MCP Server Connection Types</h3>
+<pre><code>graph TB
+    subgraph Host[&quot;Host: Claude Code&quot;]
+        AI[AI Model]
+    end
+
+    subgraph Local[&quot;Local Servers (stdio)&quot;]
+        FS[File System MCP]
+        PW[Playwright MCP]
+    end
+
+    subgraph Remote[&quot;Remote Servers (HTTP/SSE)&quot;]
+        JIRA[Jira MCP]
+        GH[GitHub MCP]
+        SLACK[Slack MCP]
+    end
+
+    AI ===|stdin/stdout| FS
+    AI ===|stdin/stdout| PW
+    AI -.-|HTTP POST + SSE| JIRA
+    AI -.-|HTTP POST + SSE| GH
+    AI -.-|HTTP POST + SSE| SLACK
+
+    style Local fill:#e8f5e9
+    style Remote fill:#fff3e0</code></pre>
+<h3>5. Playwright MCP Snapshot Workflow</h3>
+<pre><code>flowchart TD
+    A[AI needs to interact with page] --&gt; B[browser_snapshot]
+    B --&gt; C[Receives accessibility tree]
+    C --&gt; D{Can AI find the target element?}
+    D --&gt;|Yes| E[Get element ref from snapshot]
+    D --&gt;|No| F[browser_take_screenshot]
+    F --&gt; G[AI visually identifies element]
+    G --&gt; E
+    E --&gt; H{What action needed?}
+    H --&gt;|Click| I[browser_click with ref]
+    H --&gt;|Type| J[browser_fill_form with ref]
+    H --&gt;|Select| K[browser_select_option with ref]
+    H --&gt;|Hover| L[browser_hover with ref]
+    I --&gt; M[Action complete]
+    J --&gt; M
+    K --&gt; M
+    L --&gt; M
+    M --&gt; N{More actions needed?}
+    N --&gt;|Yes| A
+    N --&gt;|No| O[Done]</code></pre>
+<h3>6. End-to-End STLC Pipeline Script Flow</h3>
+<pre><code>06_full_stlc_pipeline.js
+│
+├── Step 1: Generate Test Plan
+│   ├── Read: templates/test_plan_template.md
+│   ├── Process: Replace placeholders with project data
+│   └── Write: documents/test_plan.md
+│
+├── Step 2: Generate Test Cases
+│   ├── Read: templates/test_case_template.md
+│   ├── Process: Generate 10 test case entries
+│   └── Write: documents/test_cases.md
+│
+├── Step 3: Execute Tests
+│   ├── Run: npx playwright test
+│   ├── Output: reports/results.json (JSON reporter)
+│   └── Output: reports/html-report/ (HTML reporter)
+│
+├── Step 4: Parse Results
+│   ├── Read: reports/results.json
+│   ├── Extract: Failed test names, errors, file paths
+│   └── Return: Array of failure objects
+│
+├── Step 5: Create Jira Tickets (if failures exist)
+│   ├── Connect: Mock Jira server (localhost:3001)
+│   ├── For each failure:
+│   │   ├── Create ticket with summary + description
+│   │   └── Log: &quot;Created STLC-{N}: {summary}&quot;
+│   └── Return: Array of created ticket keys
+│
+└── Step 6: Print Summary
+    ├── Total tests: 10
+    ├── Passed: 7
+    ├── Failed: 3
+    ├── Jira tickets created: 3
+    └── HTML report: stlc_project/reports/html-report/index.html</code></pre>
+<h3>7. How to Render These Diagrams</h3>
+<p>These Mermaid diagrams can be viewed in:</p>
+<ol>
+<li><strong>GitHub</strong> - Renders Mermaid natively in markdown files</li>
+<li><strong>VS Code</strong> - Install "Markdown Preview Mermaid Support" extension</li>
+<li><strong>Mermaid Live Editor</strong> - https://mermaid.live (paste the diagram code)</li>
+<li><strong>Notion</strong> - Supports Mermaid in code blocks</li>
+<li><strong>Obsidian</strong> - Built-in Mermaid support</li>
+</ol>
+</div>
+<div class="topic" id="08-mcp-tools-reference">
+<span class="badge badge-learning">Learning</span>
+<h2>MCP Tools Reference</h2>
+<h2>MCP Tools Reference</h2>
+<h3>Playwright MCP Tools</h3>
+<h3>Navigation</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td><span class="inline-code">url: string</span></td>
+<td>Navigate to a URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate_back</span></td>
+<td>none</td>
+<td>Go back in browser history</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td><span class="inline-code">time?: number</span>, <span class="inline-code">selector?: string</span>, <span class="inline-code">state?: string</span></td>
+<td>Wait for time, element, or state</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_tabs</span></td>
+<td>none</td>
+<td>List all open browser tabs</td>
+</tr>
+</table>
+<h3>Element Interaction</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td><span class="inline-code">element: string</span>, <span class="inline-code">ref: string</span></td>
+<td>Click an element by ref</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_fill_form</span></td>
+<td><span class="inline-code">ref: string</span>, <span class="inline-code">value: string</span></td>
+<td>Fill a form field</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td><span class="inline-code">ref: string</span>, <span class="inline-code">values: string[]</span></td>
+<td>Select dropdown option(s)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td><span class="inline-code">element: string</span>, <span class="inline-code">ref: string</span></td>
+<td>Hover over an element</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_drag</span></td>
+<td><span class="inline-code">startRef: string</span>, <span class="inline-code">endRef: string</span></td>
+<td>Drag from one element to another</td>
+</tr>
+</table>
+<h3>Input</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td><span class="inline-code">text: string</span>, <span class="inline-code">submit?: boolean</span></td>
+<td>Type text character by character</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td><span class="inline-code">key: string</span></td>
+<td>Press keyboard key (Enter, Tab, etc.)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_file_upload</span></td>
+<td><span class="inline-code">paths: string[]</span></td>
+<td>Upload files to file input</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_handle_dialog</span></td>
+<td><span class="inline-code">accept: boolean</span>, <span class="inline-code">promptText?: string</span></td>
+<td>Handle alert/confirm/prompt dialogs</td>
+</tr>
+</table>
+<h3>Page Information</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>none</td>
+<td>Get accessibility tree (DOM snapshot)</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td><span class="inline-code">raw?: boolean</span></td>
+<td>Capture visual screenshot</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>none</td>
+<td>Get browser console output</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>none</td>
+<td>Get network activity log</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td><span class="inline-code">expression: string</span></td>
+<td>Execute JavaScript in page context</td>
+</tr>
+</table>
+<h3>Browser Management</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_resize</span></td>
+<td><span class="inline-code">width: number</span>, <span class="inline-code">height: number</span></td>
+<td>Resize browser window</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_close</span></td>
+<td>none</td>
+<td>Close the browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_install</span></td>
+<td>none</td>
+<td>Install browser binaries</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_run_code</span></td>
+<td><span class="inline-code">code: string</span></td>
+<td>Run arbitrary Playwright code</td>
+</tr>
+</table>
+<h3>Jira MCP Tools (Conceptual)</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">create_issue</span></td>
+<td><span class="inline-code">project: string</span>, <span class="inline-code">summary: string</span>, <span class="inline-code">description: string</span>, <span class="inline-code">type: string</span>, <span class="inline-code">priority?: string</span></td>
+<td>Create a new Jira issue</td>
+</tr>
+<tr>
+<td><span class="inline-code">get_issue</span></td>
+<td><span class="inline-code">issueKey: string</span></td>
+<td>Get issue details</td>
+</tr>
+<tr>
+<td><span class="inline-code">search_issues</span></td>
+<td><span class="inline-code">jql: string</span>, <span class="inline-code">maxResults?: number</span></td>
+<td>Search issues with JQL</td>
+</tr>
+<tr>
+<td><span class="inline-code">update_issue</span></td>
+<td><span class="inline-code">issueKey: string</span>, <span class="inline-code">fields: object</span></td>
+<td>Update issue fields</td>
+</tr>
+<tr>
+<td><span class="inline-code">add_comment</span></td>
+<td><span class="inline-code">issueKey: string</span>, <span class="inline-code">body: string</span></td>
+<td>Add a comment to an issue</td>
+</tr>
+<tr>
+<td><span class="inline-code">transition_issue</span></td>
+<td><span class="inline-code">issueKey: string</span>, <span class="inline-code">transition: string</span></td>
+<td>Change issue status</td>
+</tr>
+<tr>
+<td><span class="inline-code">assign_issue</span></td>
+<td><span class="inline-code">issueKey: string</span>, <span class="inline-code">accountId: string</span></td>
+<td>Assign issue to a user</td>
+</tr>
+<tr>
+<td><span class="inline-code">attach_file</span></td>
+<td><span class="inline-code">issueKey: string</span>, <span class="inline-code">filePath: string</span></td>
+<td>Attach a file to an issue</td>
+</tr>
+</table>
+<h3>File System MCP Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">read_file</span></td>
+<td><span class="inline-code">path: string</span></td>
+<td>Read file contents</td>
+</tr>
+<tr>
+<td><span class="inline-code">write_file</span></td>
+<td><span class="inline-code">path: string</span>, <span class="inline-code">content: string</span></td>
+<td>Write content to a file</td>
+</tr>
+<tr>
+<td><span class="inline-code">list_directory</span></td>
+<td><span class="inline-code">path: string</span></td>
+<td>List directory contents</td>
+</tr>
+<tr>
+<td><span class="inline-code">create_directory</span></td>
+<td><span class="inline-code">path: string</span></td>
+<td>Create a new directory</td>
+</tr>
+<tr>
+<td><span class="inline-code">move_file</span></td>
+<td><span class="inline-code">source: string</span>, <span class="inline-code">destination: string</span></td>
+<td>Move or rename a file</td>
+</tr>
+<tr>
+<td><span class="inline-code">search_files</span></td>
+<td><span class="inline-code">path: string</span>, <span class="inline-code">pattern: string</span></td>
+<td>Search for files matching a pattern</td>
+</tr>
+<tr>
+<td><span class="inline-code">get_file_info</span></td>
+<td><span class="inline-code">path: string</span></td>
+<td>Get file metadata (size, dates)</td>
+</tr>
+</table>
+<h3>Common MCP Tool Patterns</h3>
+<h3>Pattern 1: Navigate and Verify</h3>
+<pre><code>browser_navigate(url) -&gt; browser_snapshot() -&gt; verify content</code></pre>
+<h3>Pattern 2: Fill and Submit Form</h3>
+<pre><code>browser_snapshot() -&gt; browser_fill_form(ref, value) -&gt; browser_click(submit_ref)</code></pre>
+<h3>Pattern 3: Read, Process, Write</h3>
+<pre><code>read_file(template) -&gt; process data -&gt; write_file(output)</code></pre>
+<h3>Pattern 4: Test and Report</h3>
+<pre><code>run tests -&gt; parse results -&gt; create_issue(for each failure)</code></pre>
+<h3>Tool Input Schema Format</h3>
+<p>Every MCP tool has a JSON Schema that describes its inputs:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;browser_navigate&quot;,
+  &quot;description&quot;: &quot;Navigate to a URL in the browser&quot;,
+  &quot;inputSchema&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;url&quot;: {
+        &quot;type&quot;: &quot;string&quot;,
+        &quot;description&quot;: &quot;URL to navigate to&quot;
+      }
+    },
+    &quot;required&quot;: [&quot;url&quot;]
+  }
+}</code></pre>
+<p>The AI model reads these schemas to understand:</p>
+<ul>
+<li>What parameters the tool accepts</li>
+<li>Which parameters are required vs optional</li>
+<li>What types and formats are expected</li>
+<li>What the tool does (from the description)</li>
+</ul>
+</div>
+<div class="topic" id="01-setup-mcp-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Setup MCP Exercise</h2>
+<h2>Exercise 1: Setting Up MCP</h2>
+<h3>Objective</h3>
+<p>Learn how to configure and verify MCP servers in your development environment.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js 18+ installed</li>
+<li>Claude Code or Claude Desktop installed</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Install Playwright MCP</h3>
+<pre><code>npm install @playwright/mcp</code></pre>
+<p>Verify the installation by checking <span class="inline-code">node_modules/@playwright/mcp</span> exists.</p>
+<h3>Task 2: Configure MCP Server</h3>
+<p>Add the Playwright MCP server to your Claude Code settings:</p>
+<ol>
+<li>Open your project's <span class="inline-code">.claude/settings.json</span></li>
+<li>Add the Playwright MCP configuration</li>
+<li>Restart Claude Code</li>
+</ol>
+<p><strong>Your config should look like:</strong></p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;]
+    }
+  }
+}</code></pre>
+<h3>Task 3: Verify MCP Connection</h3>
+<p>In Claude Code, ask:</p>
+<ul>
+<li>"List all available Playwright MCP tools"</li>
+<li>Verify you see tools like <span class="inline-code">browser_navigate</span>, <span class="inline-code">browser_click</span>, etc.</li>
+</ul>
+<h3>Task 4: Run Your First MCP Command</h3>
+<p>Ask Claude to:</p>
+<ol>
+<li>Navigate to <span class="inline-code">https://example.com</span></li>
+<li>Take a snapshot of the page</li>
+<li>Tell you the page title</li>
+</ol>
+<h3>Expected Outcome</h3>
+<ul>
+<li>MCP server is configured and running</li>
+<li>You can see available tools</li>
+<li>Claude can navigate and interact with web pages</li>
+</ul>
+<h3>Verification Questions</h3>
+<ol>
+<li>How many Playwright MCP tools are available?</li>
+<li>What transport does Playwright MCP use? (stdio or HTTP)</li>
+<li>What's the difference between a snapshot and a screenshot?</li>
+</ol>
+</div>
+<div class="topic" id="02-browser-automation-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Browser Automation Exercise</h2>
+<h2>Exercise 2: Browser Automation with Playwright MCP</h2>
+<h3>Objective</h3>
+<p>Use Playwright MCP tools to automate browser interactions through an AI agent.</p>
+<h3>Scenario</h3>
+<p>You need to test the login flow on <span class="inline-code">https://the-internet.herokuapp.com/login</span>.</p>
+<h3>Tasks</h3>
+<h3>Task 1: Navigate and Explore</h3>
+<p>Ask Claude (with Playwright MCP configured) to:</p>
+<ol>
+<li>Navigate to the login page</li>
+<li>Take a snapshot to see the page structure</li>
+<li>Identify the username field, password field, and login button</li>
+</ol>
+<p><strong>Write down the element refs you find:</strong></p>
+<ul>
+<li>Username field ref: ___________</li>
+<li>Password field ref: ___________</li>
+<li>Login button ref: ___________</li>
+</ul>
+<h3>Task 2: Perform a Valid Login</h3>
+<p>Ask Claude to:</p>
+<ol>
+<li>Fill username with <span class="inline-code">tomsmith</span></li>
+<li>Fill password with <span class="inline-code">SuperSecretPassword!</span></li>
+<li>Click the login button</li>
+<li>Take a snapshot to verify the result</li>
+</ol>
+<p><strong>What success message do you see?</strong> ___________</p>
+<h3>Task 3: Test an Invalid Login</h3>
+<p>Ask Claude to:</p>
+<ol>
+<li>Navigate back to <span class="inline-code">/login</span></li>
+<li>Enter invalid credentials (<span class="inline-code">baduser</span> / <span class="inline-code">badpass</span>)</li>
+<li>Click login</li>
+<li>Verify the error message</li>
+</ol>
+<p><strong>What error message appears?</strong> ___________</p>
+<h3>Task 4: Take a Screenshot</h3>
+<p>Ask Claude to take a screenshot of the result page after login attempt.</p>
+<h3>Bonus Challenge</h3>
+<p>Ask Claude to automate a complete flow:</p>
+<ol>
+<li>Navigate to homepage</li>
+<li>Click on "Checkboxes" link</li>
+<li>Toggle both checkboxes</li>
+<li>Take a screenshot of the result</li>
+</ol>
+<h3>Expected Outcome</h3>
+<ul>
+<li>You successfully used MCP tools for navigation, form filling, clicking, and verification</li>
+<li>You understand the snapshot → interact → verify cycle</li>
+</ul>
+</div>
+<div class="topic" id="03-test-plan-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Test Plan Exercise</h2>
+<h2>Exercise 3: Creating a Test Plan with MCP</h2>
+<h3>Objective</h3>
+<p>Use MCP file operations (or Claude Code) to generate a test plan from a template.</p>
+<h3>Scenario</h3>
+<p>You need to create a test plan for testing the <strong>Checkboxes</strong> page at <span class="inline-code">https://the-internet.herokuapp.com/checkboxes</span>.</p>
+<h3>Tasks</h3>
+<h3>Task 1: Define Test Scope</h3>
+<p>List what you would test on the Checkboxes page:</p>
+<ol>
+<li>___________</li>
+<li>___________</li>
+<li>___________</li>
+<li>___________</li>
+</ol>
+<h3>Task 2: Create a Test Plan</h3>
+<p>Use the template at <span class="inline-code">stlc_project/templates/test_plan_template.md</span> and create a new test plan. Replace the placeholders with:</p>
+<ul>
+<li>Project Name: "Checkboxes Feature"</li>
+<li>Author: Your name</li>
+<li>Base URL: <span class="inline-code">https://the-internet.herokuapp.com/checkboxes</span></li>
+</ul>
+<h3>Task 3: Generate Test Cases</h3>
+<p>Create at least 4 test cases for the Checkboxes page:</p>
+<table>
+<tr>
+<th>TC ID</th>
+<th>Title</th>
+<th>Steps</th>
+<th>Expected</th>
+</tr>
+<tr>
+<td>TC-001</td>
+</tr>
+<tr>
+<td>TC-002</td>
+</tr>
+<tr>
+<td>TC-003</td>
+</tr>
+<tr>
+<td>TC-004</td>
+</tr>
+</table>
+<h3>Task 4: Use Claude to Generate</h3>
+<p>Ask Claude to:</p>
+<ol>
+<li>Read the test plan template</li>
+<li>Generate a complete test plan for the Checkboxes feature</li>
+<li>Save it as <span class="inline-code">documents/checkboxes_test_plan.md</span></li>
+</ol>
+<h3>Expected Outcome</h3>
+<ul>
+<li>A complete test plan document for the Checkboxes feature</li>
+<li>At least 4 test cases defined</li>
+<li>Understanding of template-based document generation</li>
+</ul>
+</div>
+<div class="topic" id="04-failure-handling-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Failure Handling Exercise</h2>
+<h2>Exercise 4: Handling Test Failures</h2>
+<h3>Objective</h3>
+<p>Learn how to parse test failures and create Jira tickets automatically.</p>
+<h3>Tasks</h3>
+<h3>Task 1: Run the Tests</h3>
+<pre><code>cd Lecture_Playwright_MCP
+npx playwright test</code></pre>
+<p><strong>Record the results:</strong></p>
+<ul>
+<li>Total tests: ___</li>
+<li>Passed: ___</li>
+<li>Failed: ___</li>
+<li>Which tests failed? ___________</li>
+</ul>
+<h3>Task 2: Examine the JSON Report</h3>
+<p>Open <span class="inline-code">stlc_project/reports/results.json</span> and answer:</p>
+<ol>
+<li>What is the top-level structure of the JSON report?</li>
+<li>Where are the test results located in the JSON?</li>
+<li>What information is available for each failed test?</li>
+</ol>
+<h3>Task 3: Run the Result Parser</h3>
+<pre><code>node stlc_project/mcp_scripts/04_parse_results.js</code></pre>
+<p><strong>What output do you see?</strong> Document the failure details.</p>
+<h3>Task 4: Create Mock Jira Tickets</h3>
+<pre><code># Terminal 1
+node stlc_project/jira_mock/jira_mock_server.js
+
+# Terminal 2
+node stlc_project/mcp_scripts/05_create_jira_tickets.js</code></pre>
+<p><strong>Questions:</strong></p>
+<ol>
+<li>How many tickets were created?</li>
+<li>What are the ticket keys?</li>
+<li>What information is included in each ticket?</li>
+</ol>
+<h3>Task 5: Verify Tickets</h3>
+<p>Using curl, retrieve the created tickets:</p>
+<pre><code>curl http://localhost:3001/rest/api/2/search | json_pp</code></pre>
+<h3>Bonus Challenge</h3>
+<p>Modify <span class="inline-code">05_create_jira_tickets.js</span> to:</p>
+<ol>
+<li>Set different priorities based on the test category</li>
+<li>Add a custom label with the current date</li>
+</ol>
+<h3>Expected Outcome</h3>
+<ul>
+<li>Understanding of Playwright JSON report structure</li>
+<li>Ability to parse failures and extract details</li>
+<li>Experience creating automated bug tickets</li>
+</ul>
+</div>
+<div class="topic" id="05-stlc-mini-project">
+<span class="badge badge-exercise">Exercises</span>
+<h2>STLC Mini Project</h2>
+<h2>Exercise 5: STLC Mini Project</h2>
+<h3>Objective</h3>
+<p>Build your own end-to-end STLC automation pipeline for a different website.</p>
+<h3>Target Website</h3>
+<p>Choose one:</p>
+<ul>
+<li><span class="inline-code">https://the-internet.herokuapp.com/dropdown</span> (Dropdown page)</li>
+<li><span class="inline-code">https://the-internet.herokuapp.com/checkboxes</span> (Checkboxes page)</li>
+<li><span class="inline-code">https://the-internet.herokuapp.com/add_remove_elements/</span> (Add/Remove Elements)</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Test Planning (15 minutes)</h3>
+<ol>
+<li>Visit your chosen page</li>
+<li>Identify 5 test scenarios</li>
+<li>Create a test plan document using the template</li>
+<li>Include in-scope, out-of-scope, and risk assessment</li>
+</ol>
+<h3>Task 2: Test Case Design (20 minutes)</h3>
+<ol>
+<li>Write 5 Playwright test specs (at least 1 intentional failure)</li>
+<li>Follow the naming convention: <span class="inline-code">XX_description.spec.js</span></li>
+<li>Include clear assertions and console.log messages</li>
+</ol>
+<h3>Task 3: Test Execution (10 minutes)</h3>
+<ol>
+<li>Run your tests with <span class="inline-code">npx playwright test</span></li>
+<li>Verify the HTML report is generated</li>
+<li>Review the JSON report</li>
+</ol>
+<h3>Task 4: Defect Reporting (10 minutes)</h3>
+<ol>
+<li>Start the mock Jira server</li>
+<li>Modify the pipeline scripts to work with your test results</li>
+<li>Create Jira tickets for failures</li>
+</ol>
+<h3>Task 5: Pipeline Integration (15 minutes)</h3>
+<ol>
+<li>Create a master script that runs all steps</li>
+<li>Print a summary at the end</li>
+<li>Verify the complete pipeline works</li>
+</ol>
+<h3>Deliverables</h3>
+<ul>
+<li>[ ] Test plan document</li>
+<li>[ ] 5 test spec files</li>
+<li>[ ] JSON report with results</li>
+<li>[ ] HTML report</li>
+<li>[ ] Jira tickets for failures</li>
+<li>[ ] Pipeline summary output</li>
+</ul>
+<h3>Evaluation Criteria</h3>
+<ul>
+<li>All 5 tests run without errors (failures are ok if intentional)</li>
+<li>Test plan covers the chosen feature</li>
+<li>At least 1 intentional failure generates a Jira ticket</li>
+<li>Pipeline runs end-to-end without manual intervention</li>
+</ul>
+</div>
+<div class="topic" id="jira-mcp-setup-guide">
+<span class="badge badge-note">Notes</span>
+<h2>Jira MCP Setup Guide</h2>
+<h2>Jira MCP Setup Guide</h2>
+<h3>Option 1: Mock Server (No Setup Required)</h3>
+<pre><code>node stlc_project/jira_mock/jira_mock_server.js
+# Runs on http://localhost:3001</code></pre>
+<p><strong>Endpoints:</strong></p>
+<ul>
+<li><span class="inline-code">POST /rest/api/2/issue</span> - Create issue</li>
+<li><span class="inline-code">GET /rest/api/2/issue/:key</span> - Get issue</li>
+<li><span class="inline-code">GET /rest/api/2/search</span> - List issues</li>
+<li><span class="inline-code">GET /health</span> - Health check</li>
+</ul>
+<h3>Option 2: Real Jira Cloud</h3>
+<h3>Step 1: Get API Token</h3>
+<ol>
+<li>Go to https://id.atlassian.com/manage-profile/security/api-tokens</li>
+<li>Click "Create API token"</li>
+<li>Label: "STLC Automation"</li>
+<li>Copy the token</li>
+</ol>
+<h3>Step 2: Set Environment Variables</h3>
+<pre><code>export JIRA_URL=&quot;https://your-company.atlassian.net&quot;
+export JIRA_EMAIL=&quot;your-email@company.com&quot;
+export JIRA_API_TOKEN=&quot;your-token-here&quot;</code></pre>
+<h3>Step 3: Create a Project</h3>
+<ul>
+<li>Create a project in Jira with key <span class="inline-code">STLC</span></li>
+<li>Or change <span class="inline-code">projectKey</span> in <span class="inline-code">config/project_config.js</span></li>
+</ul>
+<h3>Step 4: Update Config</h3>
+<pre><code>// config/project_config.js
+jira: {
+  useMock: false,  // Switch to real Jira
+}</code></pre>
+<h3>Option 3: Jira MCP Server</h3>
+<h3>Configure</h3>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;jira&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@anthropic/jira-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;JIRA_URL&quot;: &quot;https://company.atlassian.net&quot;,
+        &quot;JIRA_EMAIL&quot;: &quot;email@company.com&quot;,
+        &quot;JIRA_API_TOKEN&quot;: &quot;token&quot;
+      }
+    }
+  }
+}</code></pre>
+<h3>Available Tools</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">create_issue</span></td>
+<td>Create bug/task/story</td>
+</tr>
+<tr>
+<td><span class="inline-code">search_issues</span></td>
+<td>Search with JQL</td>
+</tr>
+<tr>
+<td><span class="inline-code">get_issue</span></td>
+<td>Get issue details</td>
+</tr>
+<tr>
+<td><span class="inline-code">update_issue</span></td>
+<td>Update fields</td>
+</tr>
+<tr>
+<td><span class="inline-code">add_comment</span></td>
+<td>Add comment</td>
+</tr>
+<tr>
+<td><span class="inline-code">transition_issue</span></td>
+<td>Change status</td>
+</tr>
+</table>
+<h3>Quick Test (curl)</h3>
+<pre><code># Create issue
+curl -X POST http://localhost:3001/rest/api/2/issue \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;fields&quot;:{&quot;summary&quot;:&quot;Test&quot;,&quot;issuetype&quot;:{&quot;name&quot;:&quot;Bug&quot;}}}&#x27;
+
+# Get issue
+curl http://localhost:3001/rest/api/2/issue/STLC-1
+
+# List all
+curl http://localhost:3001/rest/api/2/search</code></pre>
+</div>
+<div class="topic" id="mcp-quick-reference">
+<span class="badge badge-note">Notes</span>
+<h2>MCP Quick Reference</h2>
+<h2>MCP Quick Reference</h2>
+<h3>What is MCP?</h3>
+<ul>
+<li><strong>Model Context Protocol</strong> - open standard by Anthropic</li>
+<li>Connects AI models to external tools and data sources</li>
+<li>One protocol for all tool integrations (like USB-C for AI)</li>
+</ul>
+<h3>Three Roles</h3>
+<table>
+<tr>
+<th>Role</th>
+<th>What it does</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><strong>Host</strong></td>
+<td>Runs the AI model</td>
+<td>Claude Code, Claude Desktop</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>Handles MCP protocol</td>
+<td>Built into the host</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td>Provides tools</td>
+<td>Playwright MCP, Jira MCP</td>
+</tr>
+</table>
+<h3>Transports</h3>
+<table>
+<tr>
+<th>Transport</th>
+<th>Best for</th>
+<th>How it works</th>
+</tr>
+<tr>
+<td><strong>stdio</strong></td>
+<td>Local tools</td>
+<td>Child process, stdin/stdout</td>
+</tr>
+<tr>
+<td><strong>HTTP/SSE</strong></td>
+<td>Remote tools</td>
+<td>HTTP POST + Server-Sent Events</td>
+</tr>
+</table>
+<h3>MCP Message Format (JSON-RPC 2.0)</h3>
+<pre><code>// Request
+{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 1, &quot;method&quot;: &quot;tools/call&quot;, &quot;params&quot;: { &quot;name&quot;: &quot;tool_name&quot;, &quot;arguments&quot;: {} } }
+
+// Response
+{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 1, &quot;result&quot;: { &quot;content&quot;: [{ &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;result&quot; }] } }</code></pre>
+<h3>Key Methods</h3>
+<table>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">initialize</span></td>
+<td>Establish connection</td>
+</tr>
+<tr>
+<td><span class="inline-code">tools/list</span></td>
+<td>Discover available tools</td>
+</tr>
+<tr>
+<td><span class="inline-code">tools/call</span></td>
+<td>Execute a tool</td>
+</tr>
+<tr>
+<td><span class="inline-code">resources/list</span></td>
+<td>List available data resources</td>
+</tr>
+<tr>
+<td><span class="inline-code">resources/read</span></td>
+<td>Read a resource</td>
+</tr>
+</table>
+<h3>MCP Server Config Format</h3>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;server-name&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@package/mcp-server&quot;],
+      &quot;env&quot;: { &quot;KEY&quot;: &quot;value&quot; }
+    }
+  }
+}</code></pre>
+<h3>Common MCP Servers</h3>
+<table>
+<tr>
+<th>Server</th>
+<th>Package</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td>Playwright</td>
+<td><span class="inline-code">@playwright/mcp</span></td>
+<td>Browser automation</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><span class="inline-code">@modelcontextprotocol/server-github</span></td>
+<td>Repository management</td>
+</tr>
+<tr>
+<td>Filesystem</td>
+<td><span class="inline-code">@modelcontextprotocol/server-filesystem</span></td>
+<td>File operations</td>
+</tr>
+<tr>
+<td>Slack</td>
+<td><span class="inline-code">@modelcontextprotocol/server-slack</span></td>
+<td>Messaging</td>
+</tr>
+</table>
+</div>
+<div class="topic" id="playwright-mcp-commands">
+<span class="badge badge-note">Notes</span>
+<h2>Playwright MCP Commands</h2>
+<h2>Playwright MCP Commands Reference</h2>
+<h3>Setup</h3>
+<pre><code>npm install @playwright/mcp</code></pre>
+<h3>Configuration</h3>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;]
+    }
+  }
+}</code></pre>
+<h3>Command Options</h3>
+<pre><code>npx @playwright/mcp                    # Default (headless, Chromium)
+npx @playwright/mcp --headed           # See the browser
+npx @playwright/mcp --browser firefox  # Use Firefox
+npx @playwright/mcp --viewport-size 1280x720  # Set viewport</code></pre>
+<h3>All Tools</h3>
+<h3>Navigation</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Params</th>
+<th>Use</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td><span class="inline-code">url</span></td>
+<td>Go to a URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate_back</span></td>
+<td>-</td>
+<td>Go back</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td><span class="inline-code">time</span>, <span class="inline-code">selector</span>, <span class="inline-code">state</span></td>
+<td>Wait</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_tabs</span></td>
+<td>-</td>
+<td>List tabs</td>
+</tr>
+</table>
+<h3>Click & Input</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Params</th>
+<th>Use</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td><span class="inline-code">element</span>, <span class="inline-code">ref</span></td>
+<td>Click element</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_fill_form</span></td>
+<td><span class="inline-code">ref</span>, <span class="inline-code">value</span></td>
+<td>Fill input</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td><span class="inline-code">ref</span>, <span class="inline-code">values</span></td>
+<td>Select dropdown</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td><span class="inline-code">element</span>, <span class="inline-code">ref</span></td>
+<td>Hover</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_drag</span></td>
+<td><span class="inline-code">startRef</span>, <span class="inline-code">endRef</span></td>
+<td>Drag & drop</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td><span class="inline-code">text</span>, <span class="inline-code">submit</span></td>
+<td>Type text</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td><span class="inline-code">key</span></td>
+<td>Press key</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_file_upload</span></td>
+<td><span class="inline-code">paths</span></td>
+<td>Upload file</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_handle_dialog</span></td>
+<td><span class="inline-code">accept</span>, <span class="inline-code">promptText</span></td>
+<td>Handle alerts</td>
+</tr>
+</table>
+<h3>Page Info</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Params</th>
+<th>Use</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>-</td>
+<td>Get accessibility tree + refs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td><span class="inline-code">raw</span></td>
+<td>Visual capture</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>-</td>
+<td>Console logs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>-</td>
+<td>Network activity</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td><span class="inline-code">expression</span></td>
+<td>Run JS in page</td>
+</tr>
+</table>
+<h3>Management</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Params</th>
+<th>Use</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_resize</span></td>
+<td><span class="inline-code">width</span>, <span class="inline-code">height</span></td>
+<td>Resize window</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_close</span></td>
+<td>-</td>
+<td>Close browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_install</span></td>
+<td>-</td>
+<td>Install browsers</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_run_code</span></td>
+<td><span class="inline-code">code</span></td>
+<td>Run PW code</td>
+</tr>
+</table>
+<h3>Common Workflows</h3>
+<h3>Login Test</h3>
+<pre><code>1. browser_navigate(&quot;/login&quot;)
+2. browser_snapshot()          → get field refs
+3. browser_fill_form(username_ref, &quot;user&quot;)
+4. browser_fill_form(password_ref, &quot;pass&quot;)
+5. browser_click(login_button_ref)
+6. browser_snapshot()          → verify result</code></pre>
+<h3>Visual Check</h3>
+<pre><code>1. browser_navigate(&quot;/page&quot;)
+2. browser_take_screenshot()   → visual capture
+3. browser_snapshot()          → DOM structure</code></pre>
+</div>
+<div class="topic" id="stlc-workflow-notes">
+<span class="badge badge-note">Notes</span>
+<h2>STLC Workflow Notes</h2>
+<h2>STLC Workflow Notes</h2>
+<h3>STLC Phases</h3>
+<table>
+<tr>
+<th>Phase</th>
+<th>Traditional</th>
+<th>With MCP Automation</th>
+</tr>
+<tr>
+<td><strong>1. Planning</strong></td>
+<td>QA writes test plan manually</td>
+<td>AI generates test plan from template</td>
+</tr>
+<tr>
+<td><strong>2. Design</strong></td>
+<td>QA writes test cases manually</td>
+<td>AI generates test cases from requirements</td>
+</tr>
+<tr>
+<td><strong>3. Environment</strong></td>
+<td>DevOps sets up environment</td>
+<td>Already configured in playwright.config.js</td>
+</tr>
+<tr>
+<td><strong>4. Execution</strong></td>
+<td>QA runs tests, records results</td>
+<td>Playwright runs tests, generates JSON/HTML</td>
+</tr>
+<tr>
+<td><strong>5. Defect Reporting</strong></td>
+<td>QA creates Jira tickets manually</td>
+<td>Pipeline creates tickets automatically</td>
+</tr>
+<tr>
+<td><strong>6. Closure</strong></td>
+<td>QA compiles report, presents findings</td>
+<td>HTML report + summary auto-generated</td>
+</tr>
+</table>
+<h3>Our Pipeline Mapping</h3>
+<pre><code>Phase 1 (Planning)    → 01_generate_test_plan.js
+Phase 2 (Design)      → 02_generate_test_cases.js
+Phase 3 (Environment) → playwright.config.js + project_config.js
+Phase 4 (Execution)   → 03_run_tests.js
+Phase 5 (Defects)     → 04_parse_results.js + 05_create_jira_tickets.js
+Phase 6 (Closure)     → 06_full_stlc_pipeline.js (summary)</code></pre>
+<h3>Key STLC Concepts</h3>
+<h3>Entry Criteria</h3>
+<ul>
+<li>Requirements are finalized</li>
+<li>Test environment is ready</li>
+<li>Test data is available</li>
+<li>Resources are allocated</li>
+</ul>
+<h3>Exit Criteria</h3>
+<ul>
+<li>All tests executed</li>
+<li>No critical open defects</li>
+<li>Test report reviewed</li>
+<li>Sign-off from stakeholders</li>
+</ul>
+<h3>Test Plan Components</h3>
+<ol>
+<li>Introduction & objectives</li>
+<li>Scope (in/out)</li>
+<li>Test strategy & approach</li>
+<li>Environment details</li>
+<li>Entry/exit criteria</li>
+<li>Risk assessment</li>
+<li>Schedule & milestones</li>
+<li>Deliverables</li>
+</ol>
+<h3>Test Case Components</h3>
+<ol>
+<li>Test case ID</li>
+<li>Title/description</li>
+<li>Preconditions</li>
+<li>Test steps</li>
+<li>Expected result</li>
+<li>Actual result</li>
+<li>Status (Pass/Fail)</li>
+<li>Priority & category</li>
+</ol>
+<h3>Automation Benefits</h3>
+<table>
+<tr>
+<th>Manual STLC</th>
+<th>Automated STLC</th>
+</tr>
+<tr>
+<td>Hours to create test plan</td>
+<td>Seconds with templates</td>
+</tr>
+<tr>
+<td>Minutes per test case</td>
+<td>Generated in bulk</td>
+</tr>
+<tr>
+<td>Manual test execution</td>
+<td>Automated with Playwright</td>
+</tr>
+<tr>
+<td>Manual bug filing</td>
+<td>Auto-created Jira tickets</td>
+</tr>
+<tr>
+<td>Manual report compilation</td>
+<td>HTML report auto-generated</td>
+</tr>
+<tr>
+<td>Prone to human error</td>
+<td>Consistent and repeatable</td>
+</tr>
+</table>
+<h3>When to Automate vs Manual</h3>
+<p><strong>Automate:</strong></p>
+<ul>
+<li>Repetitive regression tests</li>
+<li>Data-driven tests</li>
+<li>Cross-browser/device testing</li>
+<li>Smoke tests for CI/CD</li>
+<li>Standard STLC document generation</li>
+</ul>
+<p><strong>Keep Manual:</strong></p>
+<ul>
+<li>Exploratory testing</li>
+<li>Usability testing</li>
+<li>One-time edge case testing</li>
+<li>Visual design review</li>
+<li>Accessibility audits (use tools to assist)</li>
+</ul>
+</div>
+<div class="topic" id="01-mcp-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>MCP Interview QA</h2>
+<h2>MCP Interview Questions & Answers</h2>
+<h3>Basic Questions</h3>
+<h3>Q1: What is MCP?</h3>
+<p><strong>A:</strong> MCP (Model Context Protocol) is an open standard created by Anthropic that provides a unified protocol for AI models to connect to external tools, data sources, and services. It standardizes how AI applications discover and use tools, similar to how USB-C provides a standard connector for devices.</p>
+<h3>Q2: What problem does MCP solve?</h3>
+<p><strong>A:</strong> Before MCP, connecting AI to external tools required custom integrations for each tool with different APIs, auth methods, and data formats. MCP provides one standardized protocol to connect to any tool, reducing integration complexity from N custom integrations to 1 protocol.</p>
+<h3>Q3: What are the three main roles in MCP?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li><strong>Host</strong> - The application running the AI model (e.g., Claude Code, Claude Desktop)</li>
+<li><strong>Client</strong> - The protocol handler inside the host that manages MCP connections</li>
+<li><strong>Server</strong> - The tool provider that exposes capabilities (e.g., Playwright MCP, Jira MCP)</li>
+</ol>
+<h3>Q4: What transport mechanisms does MCP support?</h3>
+<p><strong>A:</strong> MCP supports two transports:</p>
+<ul>
+<li><strong>stdio</strong> - Server runs as a child process, communicating through stdin/stdout. Best for local tools.</li>
+<li><strong>HTTP/SSE</strong> - Server runs as a web service, using HTTP POST for requests and Server-Sent Events for responses. Best for remote/shared tools.</li>
+</ul>
+<h3>Q5: What message format does MCP use?</h3>
+<p><strong>A:</strong> MCP uses <strong>JSON-RPC 2.0</strong> format. Each message has a <span class="inline-code">jsonrpc</span> version, an <span class="inline-code">id</span>, a <span class="inline-code">method</span> (like <span class="inline-code">tools/call</span>), and <span class="inline-code">params</span> with the tool name and arguments.</p>
+<h3>Intermediate Questions</h3>
+<h3>Q6: How does tool discovery work in MCP?</h3>
+<p><strong>A:</strong> When an MCP client connects to a server, it sends an <span class="inline-code">initialize</span> request followed by a <span class="inline-code">tools/list</span> request. The server responds with a list of all available tools, each with a name, description, and JSON Schema for its input parameters. The AI model uses these schemas to understand what tools are available and how to use them.</p>
+<h3>Q7: What is the difference between MCP tools and resources?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Tools</strong> are actions the AI can perform (e.g., <span class="inline-code">browser_click</span>, <span class="inline-code">create_issue</span>). They take input and produce output.</li>
+<li><strong>Resources</strong> are data sources the AI can read (e.g., file contents, database records). They provide context without side effects.</li>
+</ul>
+<h3>Q8: How does MCP handle security?</h3>
+<p><strong>A:</strong> MCP security operates at multiple levels:</p>
+<ul>
+<li>The <strong>host</strong> controls which servers can be connected</li>
+<li><strong>User approval</strong> is required before tool execution (in most hosts)</li>
+<li>Servers can require <strong>authentication</strong> (API tokens, OAuth)</li>
+<li>The transport layer can use <strong>TLS encryption</strong> for HTTP connections</li>
+<li>Tool calls are <strong>logged</strong> for auditing</li>
+</ul>
+<h3>Q9: Can multiple MCP servers be connected simultaneously?</h3>
+<p><strong>A:</strong> Yes. A host can maintain connections to multiple MCP servers at the same time. For example, Claude Code can be connected to Playwright MCP (for browser automation), Jira MCP (for issue tracking), and GitHub MCP (for repository management) simultaneously. Each connection is independent.</p>
+<h3>Q10: How would you create a custom MCP server?</h3>
+<p><strong>A:</strong> Using the <span class="inline-code">@modelcontextprotocol/sdk</span> package:</p>
+<ol>
+<li>Create a <span class="inline-code">McpServer</span> instance with name and version</li>
+<li>Register tools using <span class="inline-code">server.tool()</span> with name, description, input schema (Zod), and handler function</li>
+<li>Connect the server to a transport (stdio or HTTP)</li>
+<li>The handler function receives arguments and returns content array</li>
+</ol>
+<h3>Advanced Questions</h3>
+<h3>Q11: What are MCP prompts and how do they differ from tools?</h3>
+<p><strong>A:</strong> MCP prompts are pre-built templates that servers can offer to hosts. While tools perform actions, prompts provide structured conversation starters or workflows. For example, a testing MCP server might offer a "generate-test-plan" prompt that guides the AI through a structured test planning process.</p>
+<h3>Q12: How would you handle errors in an MCP tool response?</h3>
+<p><strong>A:</strong> MCP tool responses can include an <span class="inline-code">isError: true</span> field to indicate failure. The content array should contain a descriptive error message. The AI model can then decide how to handle the error - retry, try an alternative approach, or report the error to the user.</p>
+<h3>Q13: What is the lifecycle of an MCP connection?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li><strong>Initialize</strong> - Client sends capabilities, server responds with its capabilities</li>
+<li><strong>Discovery</strong> - Client requests available tools, resources, and prompts</li>
+<li><strong>Usage</strong> - Client sends tool calls, server executes and returns results</li>
+<li><strong>Shutdown</strong> - Either side can close the connection gracefully</li>
+</ol>
+<h3>Q14: How does MCP compare to function calling in LLMs?</h3>
+<p><strong>A:</strong> Function calling is a feature within a single LLM API where the model can request to call pre-defined functions. MCP is a broader protocol that standardizes how AI applications connect to external tool servers. MCP builds on top of function calling by providing a standard way to discover, describe, and invoke tools across different servers and transports.</p>
+<h3>Q15: What are the limitations of MCP?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Latency</strong> - Each tool call adds round-trip time between client and server</li>
+<li><strong>Statelessness</strong> - MCP doesn't maintain state between tool calls (servers must handle this)</li>
+<li><strong>Security surface</strong> - Each connected server is a potential attack vector</li>
+<li><strong>Ecosystem maturity</strong> - Still growing; not all tools have MCP servers yet</li>
+<li><strong>Debugging</strong> - Tool call chains can be hard to trace and debug</li>
+</ul>
+<h3>Q16: How would you test an MCP server?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Unit test individual tool handlers</li>
+<li>Integration test with a mock MCP client</li>
+<li>End-to-end test by connecting to a real host (Claude Code)</li>
+<li>Test error handling with invalid inputs</li>
+<li>Test concurrent tool calls</li>
+<li>Verify JSON-RPC message format compliance</li>
+</ul>
+<h3>Q17: What is the role of JSON Schema in MCP?</h3>
+<p><strong>A:</strong> JSON Schema defines the input parameters for each tool. It tells the AI model:</p>
+<ul>
+<li>What parameters the tool accepts</li>
+<li>Which are required vs optional</li>
+<li>Data types and formats</li>
+<li>Descriptions for each parameter</li>
+</ul>
+<p>The AI uses this schema to generate correct tool call arguments without prior training on the specific tool.</p>
+<h3>Q18: How can MCP be used in CI/CD pipelines?</h3>
+<p><strong>A:</strong> MCP servers can be integrated into CI/CD by:</p>
+<ul>
+<li>Running Playwright MCP for automated browser testing</li>
+<li>Using Jira MCP to create tickets for failures</li>
+<li>Using GitHub MCP to comment on PRs with test results</li>
+<li>Using file system MCP to generate and store reports</li>
+<li>Orchestrating all of these through a pipeline script</li>
+</ul>
+<h3>Q19: What is the difference between MCP and traditional REST APIs?</h3>
+<p><strong>A:</strong></p>
+<table>
+<tr>
+<th>MCP</th>
+<th>REST API</th>
+</tr>
+<tr>
+<td>Standardized tool discovery</td>
+<td>Read docs manually</td>
+</tr>
+<tr>
+<td>AI-native tool schemas</td>
+<td>Human-oriented endpoints</td>
+</tr>
+<tr>
+<td>Built-in type system (JSON Schema)</td>
+<td>Various documentation formats</td>
+</tr>
+<tr>
+<td>Bidirectional (SSE)</td>
+<td>Request-response only</td>
+</tr>
+<tr>
+<td>One protocol for all tools</td>
+<td>Different design per API</td>
+</tr>
+</table>
+<h3>Q20: How do you handle authentication in MCP servers?</h3>
+<p><strong>A:</strong> Authentication can be handled at multiple levels:</p>
+<ul>
+<li><strong>Environment variables</strong> - API keys passed via env vars in server config</li>
+<li><strong>OAuth flow</strong> - Server handles token exchange</li>
+<li><strong>Basic auth</strong> - Username/password in headers (for REST-based servers)</li>
+<li><strong>Transport-level</strong> - TLS client certificates for HTTP transport</li>
+<li>The host typically manages and injects credentials into the server process.</li>
+</ul>
+</div>
+<div class="topic" id="02-playwright-mcp-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>Playwright MCP Interview QA</h2>
+<h2>Playwright MCP Interview Questions & Answers</h2>
+<h3>Basic Questions</h3>
+<h3>Q1: What is Playwright MCP?</h3>
+<p><strong>A:</strong> Playwright MCP is an MCP server that exposes Playwright's browser automation capabilities as MCP tools. It allows AI agents to control a browser through tool calls like <span class="inline-code">browser_navigate</span>, <span class="inline-code">browser_click</span>, <span class="inline-code">browser_fill_form</span>, etc., enabling AI-driven testing without writing Playwright scripts manually.</p>
+<h3>Q2: How do you set up Playwright MCP?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Install: <span class="inline-code">npm install @playwright/mcp</span></li>
+<li>Add to MCP settings:</li>
+</ol>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@playwright/mcp@latest&quot;]
+    }
+  }
+}</code></pre>
+<ol>
+<li>The AI agent can now use browser automation tools.</li>
+</ol>
+<h3>Q3: What is the difference between <span class="inline-code">browser_snapshot</span> and <span class="inline-code">browser_take_screenshot</span>?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Snapshot</strong> returns the accessibility tree (text-based DOM structure) with element <strong>refs</strong> for interaction. It's fast and allows the AI to "read" the page.</li>
+<li><strong>Screenshot</strong> returns a visual image of the page. It's slower but allows the AI to "see" the page visually. Useful for visual verification but doesn't provide element refs.</li>
+</ul>
+<h3>Q4: What are element refs in Playwright MCP?</h3>
+<p><strong>A:</strong> Element refs are unique identifiers assigned to elements in the accessibility snapshot. When the AI takes a snapshot, each interactive element gets a ref. The AI uses these refs in subsequent tool calls (like <span class="inline-code">browser_click(ref)</span> or <span class="inline-code">browser_fill_form(ref, value)</span>) to target specific elements.</p>
+<h3>Q5: What browsers does Playwright MCP support?</h3>
+<p><strong>A:</strong> Playwright MCP supports Chromium (default), Firefox, and WebKit. You can specify the browser with <span class="inline-code">--browser firefox</span> or <span class="inline-code">--browser webkit</span> when starting the server.</p>
+<h3>Intermediate Questions</h3>
+<h3>Q6: When would you use Playwright MCP vs writing Playwright scripts directly?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Use Playwright MCP when:</strong> doing exploratory testing, testing dynamic UIs, creating initial automation, or non-technical team members need to run tests</li>
+<li><strong>Use direct scripts when:</strong> running in CI/CD, needing deterministic/repeatable tests, performance matters, or tests are well-defined and stable</li>
+</ul>
+<h3>Q7: How does Playwright MCP handle dynamic content?</h3>
+<p><strong>A:</strong> The AI agent can:</p>
+<ol>
+<li>Use <span class="inline-code">browser_wait_for</span> to wait for elements or conditions</li>
+<li>Take repeated snapshots to detect content changes</li>
+<li>Use <span class="inline-code">browser_evaluate</span> to run JavaScript for complex waits</li>
+<li>Make dynamic decisions based on page state (unlike static scripts)</li>
+</ol>
+<h3>Q8: Can Playwright MCP handle file uploads?</h3>
+<p><strong>A:</strong> Yes, using the <span class="inline-code">browser_file_upload</span> tool with <span class="inline-code">paths</span> parameter pointing to local file paths. The AI takes a snapshot to find the file input element, then uses the upload tool with the file path.</p>
+<h3>Q9: How does Playwright MCP handle browser dialogs (alerts, confirms)?</h3>
+<p><strong>A:</strong> Using the <span class="inline-code">browser_handle_dialog</span> tool with <span class="inline-code">accept: true/false</span> and optional <span class="inline-code">promptText</span> for prompt dialogs. The AI should call this when it expects a dialog to appear.</p>
+<h3>Q10: What is <span class="inline-code">browser_evaluate</span> used for?</h3>
+<p><strong>A:</strong> <span class="inline-code">browser_evaluate</span> executes arbitrary JavaScript in the page context. It's used for:</p>
+<ul>
+<li>Getting values not available in the accessibility tree</li>
+<li>Performing complex DOM queries</li>
+<li>Executing page-level operations (scroll, localStorage, etc.)</li>
+<li>Extracting data from the page</li>
+</ul>
+<h3>Advanced Questions</h3>
+<h3>Q11: How would you integrate Playwright MCP into an STLC pipeline?</h3>
+<p><strong>A:</strong> In an STLC pipeline:</p>
+<ol>
+<li><strong>Planning</strong> - AI uses file MCP to generate test plans from templates</li>
+<li><strong>Design</strong> - AI generates test cases based on application exploration via Playwright MCP snapshots</li>
+<li><strong>Execution</strong> - Either run Playwright scripts directly (for CI/CD) or use Playwright MCP for exploratory runs</li>
+<li><strong>Reporting</strong> - Parse results, create Jira tickets via Jira MCP, generate HTML reports</li>
+<li><strong>Closure</strong> - AI compiles summary from all phases</li>
+</ol>
+<h3>Q12: How do you handle authentication-protected pages with Playwright MCP?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Navigate to the login page</li>
+<li>Use snapshot to find form fields</li>
+<li>Fill credentials using <span class="inline-code">browser_fill_form</span></li>
+<li>Click the login button</li>
+<li>Wait for authentication to complete</li>
+<li>Continue testing protected pages</li>
+</ol>
+<p>For persistent auth, you can save browser state or use API-based login.</p>
+<h3>Q13: What are the performance considerations of Playwright MCP?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Each tool call adds AI reasoning time + network round-trip</li>
+<li>Snapshots are faster than screenshots</li>
+<li>Minimize unnecessary snapshots (only take when needed)</li>
+<li>Use <span class="inline-code">browser_evaluate</span> for bulk operations instead of multiple tool calls</li>
+<li>For performance-critical testing, use direct Playwright scripts instead</li>
+</ul>
+<h3>Q14: How would you debug a failing Playwright MCP session?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Use <span class="inline-code">--headed</span> mode to see the browser</li>
+<li>Check <span class="inline-code">browser_console_messages</span> for JavaScript errors</li>
+<li>Use <span class="inline-code">browser_network_requests</span> to check API calls</li>
+<li>Take screenshots at key points</li>
+<li>Review the snapshot accessibility tree for element structure</li>
+<li>Check if element refs are stale (page may have reloaded)</li>
+</ul>
+<h3>Q15: Can Playwright MCP be used for API testing?</h3>
+<p><strong>A:</strong> While Playwright MCP is primarily for browser automation, you can:</p>
+<ul>
+<li>Use <span class="inline-code">browser_evaluate</span> to make fetch calls from the page context</li>
+<li>Use <span class="inline-code">browser_network_requests</span> to monitor API calls made by the page</li>
+<li>For pure API testing, a dedicated API testing tool or Playwright's APIRequestContext in scripts is more appropriate</li>
+</ul>
+</div>
+<div class="topic" id="03-stlc-automation-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>STLC Automation Interview QA</h2>
+<h2>STLC Automation Interview Questions & Answers</h2>
+<h3>Basic Questions</h3>
+<h3>Q1: What is STLC?</h3>
+<p><strong>A:</strong> STLC (Software Testing Life Cycle) is a systematic process for testing software. It consists of 6 phases:</p>
+<ol>
+<li><strong>Requirement Analysis</strong> - Understand what to test</li>
+<li><strong>Test Planning</strong> - Define strategy, scope, and resources</li>
+<li><strong>Test Case Design</strong> - Create detailed test cases</li>
+<li><strong>Environment Setup</strong> - Configure test environment</li>
+<li><strong>Test Execution</strong> - Run tests and record results</li>
+<li><strong>Test Closure</strong> - Analyze results, create reports, close cycle</li>
+</ol>
+<h3>Q2: What is the difference between SDLC and STLC?</h3>
+<p><strong>A:</strong> SDLC (Software Development Life Cycle) covers the entire software development process (requirements, design, coding, testing, deployment). STLC is specifically the testing portion of SDLC, focusing on planning, designing, and executing tests. STLC runs in parallel with SDLC - test planning begins during requirements, test design during development, etc.</p>
+<h3>Q3: What are entry and exit criteria in STLC?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Entry criteria</strong> - Conditions that must be met before a phase can begin (e.g., requirements are signed off, test environment is ready)</li>
+<li><strong>Exit criteria</strong> - Conditions that must be met before a phase is complete (e.g., all critical tests passed, no open blockers, test report reviewed)</li>
+</ul>
+<h3>Q4: What are the key documents in STLC?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li><strong>Test Plan</strong> - Strategy, scope, schedule, resources</li>
+<li><strong>Test Cases</strong> - Detailed steps, expected results, priority</li>
+<li><strong>Test Data</strong> - Input data for test execution</li>
+<li><strong>Defect Report</strong> - Bug details, steps to reproduce, severity</li>
+<li><strong>Test Summary Report</strong> - Results, metrics, recommendations</li>
+</ol>
+<h3>Q5: How can MCP automate STLC?</h3>
+<p><strong>A:</strong> MCP can automate each STLC phase:</p>
+<ul>
+<li><strong>Planning</strong> - AI generates test plans from templates using file MCP</li>
+<li><strong>Design</strong> - AI creates test cases based on requirements</li>
+<li><strong>Execution</strong> - Playwright MCP automates browser testing</li>
+<li><strong>Defect Reporting</strong> - Jira MCP auto-creates tickets for failures</li>
+<li><strong>Closure</strong> - Pipeline generates HTML reports and summaries</li>
+</ul>
+<h3>Intermediate Questions</h3>
+<h3>Q6: How do you handle intentional test failures in an automated pipeline?</h3>
+<p><strong>A:</strong> Options include:</p>
+<ol>
+<li><strong>Mark expected failures</strong> with comments/annotations in test files</li>
+<li><strong>Use test tags</strong> to categorize expected vs unexpected failures</li>
+<li><strong>Skip Jira creation</strong> for known/expected failures using a skip list</li>
+<li><strong>Set lower priority</strong> for known failure tickets</li>
+</ol>
+<p>In our project, we mark them with <span class="inline-code">[EXPECTED FAIL]</span> in the test description and <span class="inline-code">/<em> INTENTIONAL FAILURE </em>/</span> comments.</p>
+<h3>Q7: How would you integrate automated testing with Jira?</h3>
+<p><strong>A:</strong> Integration approaches:</p>
+<ol>
+<li><strong>REST API</strong> - Direct HTTP calls to Jira's API to create/update issues</li>
+<li><strong>MCP Server</strong> - Use Jira MCP for AI-driven ticket management</li>
+<li><strong>Webhooks</strong> - Jira triggers actions on ticket status changes</li>
+<li><strong>CI/CD plugins</strong> - Jenkins/GitHub Actions Jira integrations</li>
+</ol>
+<p>For each test failure, create a ticket with: test name, error message, screenshot, steps to reproduce, and test file path.</p>
+<h3>Q8: What makes a good automated test plan?</h3>
+<p><strong>A:</strong> A good automated test plan includes:</p>
+<ul>
+<li>Clear scope (what's automated vs manual)</li>
+<li>Framework and tool selection rationale</li>
+<li>Test data management strategy</li>
+<li>Environment configuration details</li>
+<li>Execution schedule (CI/CD triggers)</li>
+<li>Reporting and notification setup</li>
+<li>Maintenance and update procedures</li>
+<li>Risk assessment and mitigation</li>
+</ul>
+<h3>Q9: How do you decide what to automate?</h3>
+<p><strong>A:</strong> Automate tests that are:</p>
+<ul>
+<li><strong>Repetitive</strong> - Run frequently (regression, smoke)</li>
+<li><strong>Stable</strong> - Feature is unlikely to change soon</li>
+<li><strong>Data-driven</strong> - Many input combinations</li>
+<li><strong>Critical</strong> - Core business flows</li>
+<li><strong>Cross-browser</strong> - Need multi-browser verification</li>
+</ul>
+<p>Don't automate:</p>
+<ul>
+<li>One-time tests</li>
+<li>Highly visual/UX-focused tests</li>
+<li>Rapidly changing features</li>
+<li>Tests requiring human judgment</li>
+</ul>
+<h3>Q10: How do you handle flaky tests?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li><strong>Identify</strong> - Track test pass rates over time</li>
+<li><strong>Diagnose</strong> - Common causes: race conditions, dynamic content, network timing</li>
+<li><strong>Fix</strong> - Add proper waits, stabilize test data, mock external services</li>
+<li><strong>Quarantine</strong> - Temporarily isolate flaky tests from CI/CD</li>
+<li><strong>Monitor</strong> - Track flakiness metrics and fix systematically</li>
+</ol>
+<h3>Advanced Questions</h3>
+<h3>Q11: How would you design an end-to-end STLC automation pipeline?</h3>
+<p><strong>A:</strong> Design steps:</p>
+<ol>
+<li><strong>Template system</strong> for test plans and test cases (reusable across projects)</li>
+<li><strong>Test framework</strong> with clear structure (Playwright + page objects or fixtures)</li>
+<li><strong>CI/CD integration</strong> (GitHub Actions, Jenkins) for automated execution</li>
+<li><strong>Multi-reporter setup</strong> (HTML for humans, JSON for parsing, JUnit for CI)</li>
+<li><strong>Result parser</strong> that extracts failures and maps them to defects</li>
+<li><strong>Defect management</strong> integration (Jira REST API or MCP)</li>
+<li><strong>Notification system</strong> (Slack, email) for pipeline results</li>
+<li><strong>Dashboard</strong> for historical trends and metrics</li>
+</ol>
+<h3>Q12: How do you handle test data in STLC automation?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Static data</strong> - Hardcoded for stable, predictable tests</li>
+<li><strong>Dynamic data</strong> - Generated at runtime (e.g., unique usernames, timestamps)</li>
+<li><strong>Environment-specific</strong> - Stored in config files per environment</li>
+<li><strong>Sensitive data</strong> - Stored in environment variables or secret managers</li>
+<li><strong>Data cleanup</strong> - Reset data before/after test runs</li>
+</ul>
+<h3>Q13: What metrics do you track in automated STLC?</h3>
+<p><strong>A:</strong></p>
+<table>
+<tr>
+<th>Metric</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td>Pass/Fail rate</td>
+<td>Overall test health</td>
+</tr>
+<tr>
+<td>Test execution time</td>
+<td>Performance tracking</td>
+</tr>
+<tr>
+<td>Defect density</td>
+<td>Quality assessment</td>
+</tr>
+<tr>
+<td>Test coverage</td>
+<td>Scope tracking</td>
+</tr>
+<tr>
+<td>Flakiness rate</td>
+<td>Reliability assessment</td>
+</tr>
+<tr>
+<td>Mean time to detect</td>
+<td>How fast we find bugs</td>
+</tr>
+<tr>
+<td>Mean time to fix</td>
+<td>How fast bugs are resolved</td>
+</tr>
+<tr>
+<td>Automation ROI</td>
+<td>Justifying automation investment</td>
+</tr>
+</table>
+<h3>Q14: How do you scale STLC automation for large projects?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li><strong>Parallel execution</strong> - Run tests across multiple machines/containers</li>
+<li><strong>Test sharding</strong> - Split tests into groups for parallel runs</li>
+<li><strong>Selective testing</strong> - Only run tests affected by code changes</li>
+<li><strong>Shared infrastructure</strong> - Centralized test environments and tools</li>
+<li><strong>Modular framework</strong> - Reusable components across test suites</li>
+<li><strong>Team ownership</strong> - Each team owns their test automation</li>
+</ul>
+<h3>Q15: How does AI/MCP change the future of STLC?</h3>
+<p><strong>A:</strong> AI with MCP enables:</p>
+<ul>
+<li><strong>Self-healing tests</strong> - AI adapts to UI changes automatically</li>
+<li><strong>Intelligent test generation</strong> - AI creates tests from requirements</li>
+<li><strong>Smart defect triage</strong> - AI categorizes and prioritizes bugs</li>
+<li><strong>Exploratory automation</strong> - AI explores and tests features without scripts</li>
+<li><strong>Natural language testing</strong> - Non-technical users describe tests in plain English</li>
+<li><strong>Continuous testing</strong> - AI monitors and tests continuously, not just in CI/CD</li>
+</ul>
+</div>
+<div class="footer">PPTP Tutorial - Playwright Learning Batch</div>
+  </main>
+  <script>
+    // Highlight active sidebar link on scroll
+    const links = document.querySelectorAll('.sidebar a');
+    const topics = document.querySelectorAll('.topic');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      topics.forEach(topic => {
+        const top = topic.offsetTop - 100;
+        if (window.scrollY >= top) current = topic.id;
+      });
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+    // Smooth scroll
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

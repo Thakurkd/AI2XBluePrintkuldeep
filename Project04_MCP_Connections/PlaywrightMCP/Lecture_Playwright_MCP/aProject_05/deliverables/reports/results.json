@@ -1,0 +1,413 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\playwright.config.js",
+    "rootDir": "C:/Users/Kd singh/Desktop/AI2xBlueprint/Project04_MCP_Connections/PlaywrightMCP/Lecture_Playwright_MCP/aProject_05/deliverables/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/Kd singh/Desktop/AI2xBlueprint/Project04_MCP_Connections/PlaywrightMCP/Lecture_Playwright_MCP/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/Kd singh/Desktop/AI2xBlueprint/Project04_MCP_Connections/PlaywrightMCP/Lecture_Playwright_MCP/aProject_05/deliverables/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\reports\\html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\reports\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "01_add_element.spec.js",
+      "file": "01_add_element.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-001: Add Element",
+          "file": "01_add_element.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should add one Delete button when Add Element is clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4764,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Navigating to Add/Remove Elements page\n"
+                        },
+                        {
+                          "text": "Clicking Add Element once\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-25T17:24:42.846Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a478dacae2689d02fab1-4e3063173befbd80a41e",
+              "file": "01_add_element.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "02_multiple_add_remove.spec.js",
+      "file": "02_multiple_add_remove.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-002: Add and Remove Elements",
+          "file": "02_multiple_add_remove.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should add three Delete buttons and remove one",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4012,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Going to Add/Remove Elements page\n"
+                        },
+                        {
+                          "text": "Clicking Add Element 1\n"
+                        },
+                        {
+                          "text": "Clicking Add Element 2\n"
+                        },
+                        {
+                          "text": "Clicking Add Element 3\n"
+                        },
+                        {
+                          "text": "Removing one Delete button\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-25T17:24:47.901Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a8dea0d41ce51238fbeb-e3737d53017667e260fa",
+              "file": "02_multiple_add_remove.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "03_remove_all.spec.js",
+      "file": "03_remove_all.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-003: Remove Elements",
+          "file": "03_remove_all.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should remove all Delete buttons after adding two",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4496,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Opening Add/Remove Elements page\n"
+                        },
+                        {
+                          "text": "Adding two Delete buttons\n"
+                        },
+                        {
+                          "text": "Removing both Delete buttons\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-25T17:24:51.930Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "668551d2e744a6a44f9c-01d90d84a2ce2a6346fa",
+              "file": "03_remove_all.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "04_initial_state.spec.js",
+      "file": "04_initial_state.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-004: Initial Page State",
+          "file": "04_initial_state.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load with zero Delete buttons",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4213,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Navigating to Add/Remove Elements page\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-25T17:24:56.445Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0f067ab0d97a67e51f5b-637b1b406207762faf7b",
+              "file": "04_initial_state.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "05_intentional_failure.spec.js",
+      "file": "05_intentional_failure.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-005: Intentional Failure",
+          "file": "05_intentional_failure.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should intentionally fail by expecting two Delete buttons for one click",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8786,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button.added-manually')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.added-manually')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button.added-manually')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.added-manually')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\tests\\05_intentional_failure.spec.js:12:33",
+                        "location": {
+                          "file": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\tests\\05_intentional_failure.spec.js",
+                          "column": 33,
+                          "line": 12
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[36mconst\u001b[39m deleteButtons \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button.added-manually'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     \u001b[36mawait\u001b[39m expect(deleteButtons)\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m2\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\tests\\05_intentional_failure.spec.js",
+                            "column": 33,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button.added-manually')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button.added-manually')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  10 |\n  11 |     const deleteButtons = page.locator('button.added-manually');\n> 12 |     await expect(deleteButtons).toHaveCount(2);\n     |                                 ^\n  13 |   });\n  14 | });\n  15 |\n    at C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\tests\\05_intentional_failure.spec.js:12:33"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Opening Add/Remove Elements page\n"
+                        },
+                        {
+                          "text": "Clicking Add Element once\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-25T17:25:00.678Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\test-results\\05_intentional_failure-TC--50f6b-elete-buttons-for-one-click\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\test-results\\05_intentional_failure-TC--50f6b-elete-buttons-for-one-click\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\test-results\\05_intentional_failure-TC--50f6b-elete-buttons-for-one-click\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project04_MCP_Connections\\PlaywrightMCP\\Lecture_Playwright_MCP\\aProject_05\\deliverables\\tests\\05_intentional_failure.spec.js",
+                        "column": 33,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1c157d13dc71166b720d-d36dda69de36e0cc14e2",
+              "file": "05_intentional_failure.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-05-25T17:24:42.027Z",
+    "duration": 28877.356,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

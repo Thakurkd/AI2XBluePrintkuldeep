@@ -1,0 +1,186 @@
+
+Running 10 tests using 1 worker
+
+  ✘   1 Lecture_Playwright_MCP\stlc_project\tests\01_homepage.spec.js:4:3 › TC-001: Homepage › should load homepage with correct title and heading (144ms)
+  ✘   2 Lecture_Playwright_MCP\stlc_project\tests\02_navigation.spec.js:4:3 › TC-002: Navigation › should navigate to Form Authentication page via link (138ms)
+  ✘   3 Lecture_Playwright_MCP\stlc_project\tests\03_search.spec.js:4:3 › TC-003: Input Fields › should accept text input in number field (130ms)
+  ✘   4 Lecture_Playwright_MCP\stlc_project\tests\04_form_submit.spec.js:4:3 › TC-004: Form Authentication › should display login form with all required fields (131ms)
+  ✘   5 Lecture_Playwright_MCP\stlc_project\tests\05_login_valid.spec.js:4:3 › TC-005: Valid Login › should login successfully with valid credentials (134ms)
+  ✘   6 Lecture_Playwright_MCP\stlc_project\tests\06_login_invalid.spec.js:4:3 › TC-006: Invalid Login › should show error message with invalid credentials (137ms)
+  ✘   7 Lecture_Playwright_MCP\stlc_project\tests\07_broken_link.spec.js:13:3 › TC-007: Broken Link Detection [EXPECTED FAIL] › should verify broken image returns 200 status (142ms)
+  ✘   8 Lecture_Playwright_MCP\stlc_project\tests\08_wrong_title.spec.js:14:3 › TC-008: Page Title Verification [EXPECTED FAIL] › should have correct page title (144ms)
+  ✘   9 Lecture_Playwright_MCP\stlc_project\tests\09_timeout_page.spec.js:14:3 › TC-009: Timeout Handling [EXPECTED FAIL] › should find element within timeout (135ms)
+  ✘  10 Lecture_Playwright_MCP\stlc_project\tests\10_visual_check.spec.js:4:3 › TC-010: Visual Elements › should have all key visual elements on homepage (147ms)
+
+
+  1) Lecture_Playwright_MCP\stlc_project\tests\01_homepage.spec.js:4:3 › TC-001: Homepage › should load homepage with correct title and heading 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/", waiting until "load"[22m
+
+
+      3 | test.describe('TC-001: Homepage', () => {
+      4 |   test('should load homepage with correct title and heading', async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |
+      7 |     // Verify the page title
+      8 |     await expect(page).toHaveTitle('The Internet');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\01_homepage.spec.js:5:16
+
+  2) Lecture_Playwright_MCP\stlc_project\tests\02_navigation.spec.js:4:3 › TC-002: Navigation › should navigate to Form Authentication page via link 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/", waiting until "load"[22m
+
+
+      3 | test.describe('TC-002: Navigation', () => {
+      4 |   test('should navigate to Form Authentication page via link', async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |
+      7 |     // Verify the link exists
+      8 |     const loginLink = page.locator('a[href="/login"]');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\02_navigation.spec.js:5:16
+
+  3) Lecture_Playwright_MCP\stlc_project\tests\03_search.spec.js:4:3 › TC-003: Input Fields › should accept text input in number field 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/inputs", waiting until "load"[22m
+
+
+      3 | test.describe('TC-003: Input Fields', () => {
+      4 |   test('should accept text input in number field', async ({ page }) => {
+    > 5 |     await page.goto('/inputs');
+        |                ^
+      6 |
+      7 |     // Verify the input page heading
+      8 |     const heading = page.locator('h3');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\03_search.spec.js:5:16
+
+  4) Lecture_Playwright_MCP\stlc_project\tests\04_form_submit.spec.js:4:3 › TC-004: Form Authentication › should display login form with all required fields 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/login", waiting until "load"[22m
+
+
+      3 | test.describe('TC-004: Form Authentication', () => {
+      4 |   test('should display login form with all required fields', async ({ page }) => {
+    > 5 |     await page.goto('/login');
+        |                ^
+      6 |
+      7 |     // Verify the login form heading
+      8 |     const heading = page.locator('h2');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\04_form_submit.spec.js:5:16
+
+  5) Lecture_Playwright_MCP\stlc_project\tests\05_login_valid.spec.js:4:3 › TC-005: Valid Login › should login successfully with valid credentials 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/login", waiting until "load"[22m
+
+
+      3 | test.describe('TC-005: Valid Login', () => {
+      4 |   test('should login successfully with valid credentials', async ({ page }) => {
+    > 5 |     await page.goto('/login');
+        |                ^
+      6 |
+      7 |     // Enter valid credentials
+      8 |     await page.locator('#username').fill('tomsmith');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\05_login_valid.spec.js:5:16
+
+  6) Lecture_Playwright_MCP\stlc_project\tests\06_login_invalid.spec.js:4:3 › TC-006: Invalid Login › should show error message with invalid credentials 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/login", waiting until "load"[22m
+
+
+      3 | test.describe('TC-006: Invalid Login', () => {
+      4 |   test('should show error message with invalid credentials', async ({ page }) => {
+    > 5 |     await page.goto('/login');
+        |                ^
+      6 |
+      7 |     // Enter invalid credentials
+      8 |     await page.locator('#username').fill('invaliduser');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\06_login_invalid.spec.js:5:16
+
+  7) Lecture_Playwright_MCP\stlc_project\tests\07_broken_link.spec.js:13:3 › TC-007: Broken Link Detection [EXPECTED FAIL] › should verify broken image returns 200 status 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/broken_images", waiting until "load"[22m
+
+
+      12 | test.describe('TC-007: Broken Link Detection [EXPECTED FAIL]', () => {
+      13 |   test('should verify broken image returns 200 status', async ({ page, request }) => {
+    > 14 |     await page.goto('/broken_images');
+         |                ^
+      15 |
+      16 |     // Get a broken image src - this image intentionally doesn't load
+      17 |     const brokenImg = page.locator('img').nth(1);
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\07_broken_link.spec.js:14:16
+
+  8) Lecture_Playwright_MCP\stlc_project\tests\08_wrong_title.spec.js:14:3 › TC-008: Page Title Verification [EXPECTED FAIL] › should have correct page title 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/", waiting until "load"[22m
+
+
+      13 | test.describe('TC-008: Page Title Verification [EXPECTED FAIL]', () => {
+      14 |   test('should have correct page title', async ({ page }) => {
+    > 15 |     await page.goto('/');
+         |                ^
+      16 |
+      17 |     // INTENTIONAL FAILURE: Asserting wrong title
+      18 |     // The actual title is "The Internet", not "Wrong Title That Does Not Exist"
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\08_wrong_title.spec.js:15:16
+
+  9) Lecture_Playwright_MCP\stlc_project\tests\09_timeout_page.spec.js:14:3 › TC-009: Timeout Handling [EXPECTED FAIL] › should find element within timeout 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/dynamic_loading/1", waiting until "load"[22m
+
+
+      13 | test.describe('TC-009: Timeout Handling [EXPECTED FAIL]', () => {
+      14 |   test('should find element within timeout', async ({ page }) => {
+    > 15 |     await page.goto('/dynamic_loading/1');
+         |                ^
+      16 |
+      17 |     // INTENTIONAL FAILURE: Waiting for non-existent element with 1ms timeout
+      18 |     // This will always timeout because:
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\09_timeout_page.spec.js:15:16
+
+  10) Lecture_Playwright_MCP\stlc_project\tests\10_visual_check.spec.js:4:3 › TC-010: Visual Elements › should have all key visual elements on homepage 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+    [2m  - navigating to "/", waiting until "load"[22m
+
+
+      3 | test.describe('TC-010: Visual Elements', () => {
+      4 |   test('should have all key visual elements on homepage', async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |
+      7 |     // Verify main heading exists
+      8 |     const heading = page.locator('h1.heading');
+        at C:\Users\Kd singh\Desktop\AI2xBlueprint\Project04_MCP_Connections\PlaywrightMCP\Lecture_Playwright_MCP\stlc_project\tests\10_visual_check.spec.js:5:16
+
+  10 failed
+    Lecture_Playwright_MCP\stlc_project\tests\01_homepage.spec.js:4:3 › TC-001: Homepage › should load homepage with correct title and heading 
+    Lecture_Playwright_MCP\stlc_project\tests\02_navigation.spec.js:4:3 › TC-002: Navigation › should navigate to Form Authentication page via link 
+    Lecture_Playwright_MCP\stlc_project\tests\03_search.spec.js:4:3 › TC-003: Input Fields › should accept text input in number field 
+    Lecture_Playwright_MCP\stlc_project\tests\04_form_submit.spec.js:4:3 › TC-004: Form Authentication › should display login form with all required fields 
+    Lecture_Playwright_MCP\stlc_project\tests\05_login_valid.spec.js:4:3 › TC-005: Valid Login › should login successfully with valid credentials 
+    Lecture_Playwright_MCP\stlc_project\tests\06_login_invalid.spec.js:4:3 › TC-006: Invalid Login › should show error message with invalid credentials 
+    Lecture_Playwright_MCP\stlc_project\tests\07_broken_link.spec.js:13:3 › TC-007: Broken Link Detection [EXPECTED FAIL] › should verify broken image returns 200 status 
+    Lecture_Playwright_MCP\stlc_project\tests\08_wrong_title.spec.js:14:3 › TC-008: Page Title Verification [EXPECTED FAIL] › should have correct page title 
+    Lecture_Playwright_MCP\stlc_project\tests\09_timeout_page.spec.js:14:3 › TC-009: Timeout Handling [EXPECTED FAIL] › should find element within timeout 
+    Lecture_Playwright_MCP\stlc_project\tests\10_visual_check.spec.js:4:3 › TC-010: Visual Elements › should have all key visual elements on homepage 

@@ -1,0 +1,29 @@
+{
+  "name": "learningplaywrightbatch",
+  "version": "1.0.0",
+  "description": "Small collection of Playwright example scripts used for learning and experimentation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PramodDutta/LearningPlaywrightBatch.git"
+  },
+  "keywords": [
+    "PLAYWRIGHT",
+    "THETESTINGACADEMY"
+  ],
+  "author": "PrrammoD duTTA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PramodDutta/LearningPlaywrightBatch/issues"
+  },
+  "homepage": "https://github.com/PramodDutta/LearningPlaywrightBatch#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "lecture-playwright-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Playwright project for Lecture_Playwright_MCP.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "playwright": "^1.58.2"
+  }
+}

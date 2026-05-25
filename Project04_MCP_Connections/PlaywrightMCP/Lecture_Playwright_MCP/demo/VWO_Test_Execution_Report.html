@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO Test Execution Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 2rem;
+            color: #334155;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            color: #0f172a;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .timestamp {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .summary {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .summary-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .summary-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .summary-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .value.total { color: #3b82f6; }
+        .value.pass { color: #10b981; }
+        .value.fail { color: #ef4444; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background-color: #f1f5f9;
+        }
+        .col-id { font-weight: 600; color: #0f172a; width: 15%; }
+        .col-title { width: 50%; }
+        .col-status { width: 15%; text-align: center; }
+        .col-duration { width: 20%; color: #64748b; font-size: 0.9rem; text-align: right; }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        .status-pass {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .status-pass::before {
+            content: "✓";
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VWO Invalid Login Execution Report</h1>
+            <div class="timestamp">Generated: March 17, 2026, 21:10 IST</div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Tests</h3>
+                <div class="value total">5</div>
+            </div>
+            <div class="summary-card">
+                <h3>Passed</h3>
+                <div class="value pass">5</div>
+            </div>
+            <div class="summary-card">
+                <h3>Failed</h3>
+                <div class="value fail">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Pass Rate</h3>
+                <div class="value pass">100%</div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-id">Test ID</th>
+                    <th class="col-title">Description</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-duration">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-id">TC-001</td>
+                    <td class="col-title">Arabic Login with Invalid Credentials</td>
+                    <td class="col-status"><span class="status-badge status-pass">Pass</span></td>
+                    <td class="col-duration">Error Msg Displayed</td>
+                </tr>
+                <tr>
+                    <td class="col-id">TC-002</td>
+                    <td class="col-title">Chinese Login with Invalid Credentials</td>
+                    <td class="col-status"><span class="status-badge status-pass">Pass</span></td>
+                    <td class="col-duration">Error Msg Displayed</td>
+                </tr>
+                <tr>
+                    <td class="col-id">TC-003</td>
+                    <td class="col-title">Dummy Standard Login with Invalid Credentials</td>
+                    <td class="col-status"><span class="status-badge status-pass">Pass</span></td>
+                    <td class="col-duration">Error Msg Displayed</td>
+                </tr>
+                <tr>
+                    <td class="col-id">TC-004</td>
+                    <td class="col-title">Invalid Format Email Address Login</td>
+                    <td class="col-status"><span class="status-badge status-pass">Pass</span></td>
+                    <td class="col-duration">Error Msg Displayed</td>
+                </tr>
+                <tr>
+                    <td class="col-id">TC-005</td>
+                    <td class="col-title">Empty Fields Login attempt</td>
+                    <td class="col-status"><span class="status-badge status-pass">Pass</span></td>
+                    <td class="col-duration">Error Msg Displayed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
