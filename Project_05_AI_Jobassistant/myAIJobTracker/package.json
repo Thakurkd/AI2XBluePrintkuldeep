@@ -1,0 +1,21 @@
+{
+  "name": "AIJobTrackerKuldeep",
+  "version": "1.0.0",
+  "description": "Full-stack AI-powered Job Tracker application",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install && cd ..",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "start": "npm run dev",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "preview": "cd client && npm run preview"
+  },
+  "keywords": ["job-tracker", "ai", "claude", "react", "express"],
+  "author": "Kuldeep",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
