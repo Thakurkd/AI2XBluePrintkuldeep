@@ -1,0 +1,23 @@
+{
+    "firstName": "Kuldeep",
+    "lastName": "Singh",
+    "fullName": "Kuldeep Singh",
+    "email": "Singhkd332@gmail.com",
+    "phone": "8299614143",
+    "yearsOfExperience": 7,
+    "currentJobTitle": "QA Engineer",
+    "currentCompany": "CEDCOSS Technologies",
+    "education": "B.Tech (Computer Science) from LPU JALANDHAR",
+    "skills": [
+        "DBMS",
+        "DB2",
+        "JIRA",
+        "Mantis",
+        "SDLC",
+        "Manual Testing",
+        "API Testing",
+        "Regression Testing",
+        "SQL"
+    ],
+    "resumePath": "c:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project_05_AI_Jobassistant\\MyResume\\Kd resume.docx"
+}
