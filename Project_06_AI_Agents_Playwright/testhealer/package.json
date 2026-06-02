@@ -1,0 +1,18 @@
+{
+  "name": "testhealer-vwo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:chromium": "playwright test --project=chromium",
+    "test:debug": "playwright test --debug",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "dotenv": "^17.4.2",
+    "winston": "^3.19.0"
+  }
+}

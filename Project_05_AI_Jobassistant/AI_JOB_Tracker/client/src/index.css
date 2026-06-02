@@ -1,0 +1,36 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-textPrimary font-dm;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-outfit font-semibold;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card backdrop-blur-lg rounded-lg border border-white border-opacity-10;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-card text-textPrimary rounded-lg font-medium hover:bg-opacity-20 transition-all;
+  }
+}

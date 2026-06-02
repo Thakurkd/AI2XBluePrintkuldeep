@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "playwright-test": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp",
+        "--isolated",
+        "--save-trace"
+      ],
+      "cwd": "C:\\Users\\Kd singh\\Desktop\\AI2xBlueprint\\Project_06_AI_Agents_Playwright"
+    }
+  }
+}
