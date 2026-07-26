@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
-import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+// Loads .env from the project root for local dev. On Vercel there is no .env
+// file and no __dirname (ESM), so the platform's environment is used as-is.
+dotenv.config();
 
 export interface JiraConfig {
     baseUrl: string;

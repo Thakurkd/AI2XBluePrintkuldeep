@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { resolveLLMConfig } from '../config';
-import { chat, parseJSON, stripCodeFences } from '../services/llm.service';
-import { repairGeneratedCode } from '../services/codeRepair';
+import { resolveLLMConfig } from '../config.js';
+import { chat, parseJSON, stripCodeFences } from '../services/llm.service.js';
+import { repairGeneratedCode } from '../services/codeRepair.js';
 import {
     TEST_CASES_SYSTEM,
     TEST_PLAN_SYSTEM,
@@ -9,8 +9,8 @@ import {
     codeGenUser,
     testCasesUser,
     testPlanUser,
-} from '../prompts';
-import { CodeLanguage, Framework, TestCase, UserStory } from '../types';
+} from '../prompts.js';
+import { CodeLanguage, Framework, TestCase, UserStory } from '../types.js';
 
 const router = Router();
 

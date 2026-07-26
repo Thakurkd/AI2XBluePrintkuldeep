@@ -1,4 +1,4 @@
-import { Framework, CodeLanguage, TestCase, UserStory } from './types';
+import { Framework, CodeLanguage, TestCase, UserStory } from './types.js';
 
 /** Compact a story into the context block the model reasons over. */
 export function renderStory(story: UserStory): string {

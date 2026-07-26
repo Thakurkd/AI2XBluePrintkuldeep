@@ -22,26 +22,35 @@ A two-process application. The browser never holds a credential — Vite proxies
 `/api` to the backend, and every Jira or LLM call is made server-side.
 
 ```
-frontend/  React 19 + Vite + TypeScript   :5173
-backend/   Express 5 + TypeScript         :5007
+src/     React 19 + Vite + TypeScript   :5173
+server/  Express 5 + TypeScript         :5007
+api/     Vercel serverless wrapper around the same Express app
 ```
+
+Local dev runs two processes; in production `api/index.ts` exports the Express
+app as a serverless function and Vercel serves the built frontend as static
+files. The application code is identical in both.
 
 ### Backend
 
 | File | Responsibility |
 | ---- | -------------- |
-| [`config.ts`](backend/src/config.ts) | Loads `.env`, merges per-request overrides, refuses to run half-configured |
-| [`services/jira.service.ts`](backend/src/services/jira.service.ts) | Jira Cloud REST v3 — auth, search, ADF flattening, JQL normalisation |
-| [`services/llm.service.ts`](backend/src/services/llm.service.ts) | One chat interface over Groq, OpenAI, Claude, Gemini, and Ollama |
-| [`services/codeRepair.ts`](backend/src/services/codeRepair.ts) | Deterministic fixes for defects the model repeats |
-| [`prompts.ts`](backend/src/prompts.ts) | The three system prompts that define output quality |
-| [`routes/`](backend/src/routes/) | Six Jira and generation endpoints |
+| [`config.ts`](server/config.ts) | Loads `.env`, merges per-request overrides, refuses to run half-configured |
+| [`services/jira.service.ts`](server/services/jira.service.ts) | Jira Cloud REST v3 — auth, search, ADF flattening, JQL normalisation |
+| [`services/llm.service.ts`](server/services/llm.service.ts) | One chat interface over Groq, OpenAI, Claude, Gemini, and Ollama |
+| [`services/codeRepair.ts`](server/services/codeRepair.ts) | Deterministic fixes for defects the model repeats |
+| [`prompts.ts`](server/prompts.ts) | The three system prompts that define output quality |
+| [`routes/`](server/routes/) | Six Jira and generation endpoints |
 
 ### Frontend
 
-Six views sharing one store ([`store.tsx`](frontend/src/store.tsx)) persisted to
+Six views sharing one store ([`store.tsx`](src/store.tsx)) persisted to
 local storage, so a half-finished run survives a refresh: **Settings**,
 **User Stories**, **Test Plan**, **Test Cases**, **Dashboard**, **Code Generator**.
+
+A [`PasswordGate`](src/components/PasswordGate.tsx) wraps the app. The deployed
+API holds a Jira token and an LLM key, so every route behind `/api` requires a
+shared password. Locally `APP_PASSWORD` is unset and the gate resolves open.
 
 ## How the workflow runs
 
@@ -62,7 +71,7 @@ flowchart TD
 ### 1. Settings
 
 Point the app at a Jira site and choose a model. Credentials live in
-`backend/.env`; anything typed here overrides them for that browser only, so the
+`.env`; anything typed here overrides them for that browser only, so the
 token never has to leave the server.
 
 ### 2. User Stories
@@ -115,9 +124,9 @@ placeholder with a `TODO` rather than invent one and present it as real.
 recurred: annotating with Playwright's `Page` without importing it, and defining
 a page object *while also* importing it from a sibling path — a duplicate
 identifier. Adding rules to the prompt did not stop either.
-[`codeRepair.ts`](backend/src/services/codeRepair.ts) fixes both deterministically
+[`codeRepair.ts`](server/services/codeRepair.ts) fixes both deterministically
 and is a no-op on correct output. Sixteen unit tests cover it and the JQL
-normaliser: `npm test` in `backend/`.
+normaliser: `npm test` at the project root.
 
 **Free-tier rate limits shape the design.** Groq allows 12,000 tokens per minute,
 and a plan-then-cases run exceeded it. The client now right-sizes `max_tokens`

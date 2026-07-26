@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { resolveJiraConfig } from '../config';
-import { fetchUserStories, fetchUserStory, listProjects, verifyConnection } from '../services/jira.service';
+import { resolveJiraConfig } from '../config.js';
+import { fetchUserStories, fetchUserStory, listProjects, verifyConnection } from '../services/jira.service.js';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.post('/verify', async (req, res, next) => {
 });
 
 /** GET /api/jira/projects - projects the credentials can see. */
-router.get('/projects', async (req, res, next) => {
+router.get('/projects', async (_req, res, next) => {
     try {
         const config = resolveJiraConfig();
         res.json({ projects: await listProjects(config) });

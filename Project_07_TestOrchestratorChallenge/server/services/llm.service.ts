@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LLMConfig } from '../config';
+import { LLMConfig } from '../config.js';
 
 export interface ChatOptions {
     temperature?: number;

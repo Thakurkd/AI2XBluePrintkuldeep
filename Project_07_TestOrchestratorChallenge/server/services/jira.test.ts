@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { projectJql, toJql } from './jira.service';
+import { projectJql, toJql } from './jira.service.js';
 
 const cases: { name: string; run: () => void }[] = [
     {

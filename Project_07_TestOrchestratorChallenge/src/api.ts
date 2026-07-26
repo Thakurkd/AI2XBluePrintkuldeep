@@ -17,12 +17,32 @@ function pruned<T extends object>(value: T): Partial<T> {
     ) as Partial<T>;
 }
 
+const PASSWORD_KEY = 'test-orchestrator:password';
+
+export const session = {
+    get: () => sessionStorage.getItem(PASSWORD_KEY) ?? '',
+    set: (value: string) => sessionStorage.setItem(PASSWORD_KEY, value),
+    clear: () => sessionStorage.removeItem(PASSWORD_KEY),
+};
+
+/** Thrown when the deployment is gated and the stored password is missing or stale. */
+export class AuthError extends Error {}
+
 async function request<T>(path: string, body?: unknown): Promise<T> {
+    const password = session.get();
     const response = await fetch(`/api${path}`, {
         method: body === undefined ? 'GET' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...(password ? { 'x-app-password': password } : {}),
+        },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
+
+    if (response.status === 401) {
+        session.clear();
+        throw new AuthError('Password required.');
+    }
 
     const text = await response.text();
     let payload: any = {};
@@ -41,6 +61,20 @@ async function request<T>(path: string, body?: unknown): Promise<T> {
 }
 
 export const api = {
+    /** Unauthenticated — tells the UI whether this deployment is gated at all. */
+    health: () => request<{ status: string; authRequired: boolean }>('/health'),
+
+    /** Verifies a password without side effects; throws AuthError if wrong. */
+    signIn: async (password: string) => {
+        session.set(password);
+        try {
+            await request<{ ok: true }>('/auth', {});
+        } catch (error) {
+            session.clear();
+            throw error;
+        }
+    },
+
     serverConfig: () => request<ServerConfig>('/config'),
 
     verifyJira: (jira: JiraSettings) =>

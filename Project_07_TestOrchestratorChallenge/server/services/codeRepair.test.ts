@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { repairGeneratedCode } from './codeRepair';
+import { repairGeneratedCode } from './codeRepair.js';
 
 const cases: { name: string; run: () => void }[] = [
     {
@@ -42,12 +42,12 @@ const cases: { name: string; run: () => void }[] = [
         run: () => {
             const input = [
                 `import { test, expect } from '@playwright/test';`,
-                `import { LoginPage } from './LoginPage';`,
+                `import { LoginPage } from './LoginPage.js';`,
                 `class LoginPage {}`,
                 `test('x', async () => { new LoginPage(); });`,
             ].join('\n');
             const out = repairGeneratedCode(input, 'playwright', 'typescript');
-            assert.doesNotMatch(out, /from '\.\/LoginPage'/);
+            assert.doesNotMatch(out, /from '\.\/LoginPage\.js'/);
             assert.match(out, /class LoginPage \{\}/);
         },
     },
@@ -55,7 +55,7 @@ const cases: { name: string; run: () => void }[] = [
         name: 'keeps a relative import of something not defined here',
         run: () => {
             const input = [
-                `import { helper } from './helpers';`,
+                `import { helper } from './helpers.js';`,
                 `class LoginPage {}`,
             ].join('\n');
             assert.equal(repairGeneratedCode(input, 'playwright', 'typescript'), input);

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import { JiraConfig } from '../config';
-import { UserStory } from '../types';
+import { JiraConfig } from '../config.js';
+import { UserStory } from '../types.js';
 
 const FIELDS = [
     'summary',

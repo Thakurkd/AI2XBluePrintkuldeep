@@ -16,19 +16,32 @@ test case becomes the specification the code generator compiles against.
 | Jira     | Jira Cloud REST v3, Basic auth with an API token  |
 | LLM      | Groq (default), OpenAI, Claude, Gemini, or Ollama |
 
+## Live
+
+**https://test-orchestrator-sable.vercel.app** — password protected, since the API
+reads a Jira project and spends an LLM quota.
+
+## Layout
+
+One package at the root, which is what Vercel expects for a full-stack app:
+
+```
+src/       React frontend
+server/    Express app (routes, services, prompts)
+api/       Vercel serverless entry — wraps the same Express app
+```
+
+Locally `server/server.ts` listens on a port; on Vercel `api/index.ts` exports
+the app as a function. Same code either way.
+
 ## Setup
 
 ```bash
-# backend
-cd backend
 npm install
 cp .env.example .env     # then fill in the values below
-npm run dev              # http://localhost:5007
 
-# frontend (separate terminal)
-cd frontend
-npm install
-npm run dev              # http://localhost:5173
+npm run dev              # frontend on http://localhost:5173
+npm run dev:api          # backend  on http://localhost:5007 (separate terminal)
 ```
 
 Vite proxies `/api` to port 5007, so the browser never holds an API key.
@@ -76,13 +89,13 @@ Stories, plans, cases, and code persist in browser local storage.
 Two problems needed more than prompting:
 
 - **Missing type imports.** Models annotate with Playwright's `Page` and then
-  forget to import it. [codeRepair.ts](backend/src/services/codeRepair.ts) adds
+  forget to import it. [codeRepair.ts](server/services/codeRepair.ts) adds
   any referenced-but-unimported type deterministically.
 - **Self-imports.** Asked for one self-contained file, models sometimes define
   the page object *and* import it from a sibling path — a duplicate-identifier
   error. The repair pass drops the redundant import.
 
-Both are no-ops on correct output. `npm test` in `backend/` covers them.
+Both are no-ops on correct output. `npm test` at the project root covers them.
 
 **Rate limits.** Groq's free tier allows 12,000 tokens/minute, which a
 plan-then-cases run can exceed. The LLM client honours the provider's
@@ -95,12 +108,29 @@ model is worth the cost.
 ## Scripts
 
 ```bash
-# backend
-npm run dev        # nodemon + ts-node
-npm run typecheck  # tsc --noEmit
-npm test           # code-repair unit tests
-
-# frontend
-npm run dev
-npm run build      # tsc -b && vite build
+npm run dev        # Vite dev server
+npm run dev:api    # Express API with reload
+npm run build      # production frontend bundle
+npm run typecheck  # both tsconfigs
+npm test           # code-repair and JQL unit tests
 ```
+
+## Deploying
+
+The Vercel project is the repo subfolder itself. Secrets are set as production
+environment variables — the same names as `.env`, plus `APP_PASSWORD`:
+
+```bash
+vercel env add APP_PASSWORD production
+vercel deploy --prod
+```
+
+Two things that will bite you if you change the layout:
+
+- **`type: "module"` means Node's ESM loader,** so every relative import in
+  `server/` and `api/` needs an explicit `.js` extension. Vercel transpiles
+  TypeScript without rewriting specifiers, so an extensionless import compiles
+  fine and then fails at runtime. `tsconfig.server.json` uses `nodenext` so
+  TypeScript catches it first.
+- **Nested `package.json` files trigger Vercel's service auto-detection,** which
+  conflicts with a top-level `buildCommand`. One package at the root avoids it.

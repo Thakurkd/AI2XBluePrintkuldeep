@@ -1,4 +1,4 @@
-import { CodeLanguage, Framework } from '../types';
+import { CodeLanguage, Framework } from '../types.js';
 
 /**
  * Playwright type names that models routinely annotate with but forget to
