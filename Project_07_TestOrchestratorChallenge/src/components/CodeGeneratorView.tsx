@@ -172,7 +172,13 @@ export default function CodeGeneratorView() {
 
                 <div className="codegen-main">
                     {error && <Banner kind="error">{error}</Banner>}
-                    {busy && <Spinner label={`Writing ${activeFramework.label} code with ${llm.model}…`} />}
+                    {busy && (
+                        <Spinner
+                            label={`Writing ${activeFramework.label} code with ${
+                                llm.model || 'the configured model'
+                            }…`}
+                        />
+                    )}
 
                     {!busy && current && (
                         <Panel

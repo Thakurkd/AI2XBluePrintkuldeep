@@ -44,19 +44,47 @@ function fail(provider: string, error: any): never {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** Longest we will sit waiting out a rate limit before handing the user back control. */
+const MAX_RETRY_WAIT_MS = 15_000;
+
+/** Serverless kills the function at 60s; stop early enough to return a real error. */
+const RETRY_BUDGET_MS = 35_000;
+
+function humanDuration(ms: number): string {
+    const seconds = Math.ceil(ms / 1000);
+    if (seconds < 90) return `${seconds} seconds`;
+    const minutes = Math.round(seconds / 60);
+    if (minutes < 90) return `${minutes} minutes`;
+    return `${Math.round(minutes / 60)} hours`;
+}
+
 /**
- * Free tiers rate-limit by tokens per minute, and a two-call pipeline trips that
- * routinely. Wait out the window the provider tells us to wait rather than
- * surfacing a 429 the user can do nothing about.
+ * Per-minute limits are worth waiting out - a plan-then-cases run trips them
+ * routinely and the window is seconds long. Per-day quotas are not: the provider
+ * reports a wait measured in hours, and sleeping on that just burns the request
+ * budget and returns a timeout that explains nothing. Tell the user instead.
  */
 async function withRateLimitRetry<T>(operation: () => Promise<T>, attempts = 3): Promise<T> {
+    const startedAt = Date.now();
+
     for (let attempt = 1; ; attempt++) {
         try {
             return await operation();
         } catch (error) {
-            const { status, retryAfterMs: wait } = error as ProviderError;
-            if (status !== 429 || attempt >= attempts) throw error;
-            await sleep(Math.min(wait ?? attempt * 5000, 60_000) + 500);
+            const failure = error as ProviderError;
+            if (failure.status !== 429) throw error;
+
+            const wait = failure.retryAfterMs ?? attempt * 5000;
+            const spent = Date.now() - startedAt;
+            const outOfBudget = spent + wait > RETRY_BUDGET_MS;
+
+            if (attempt >= attempts || wait > MAX_RETRY_WAIT_MS || outOfBudget) {
+                failure.message =
+                    `${failure.message}\n\nQuota exhausted — retry in about ${humanDuration(wait)}. ` +
+                    `Switch provider or model in Settings to keep working now.`;
+                throw failure;
+            }
+            await sleep(wait + 500);
         }
     }
 }

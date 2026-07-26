@@ -72,7 +72,7 @@ export default function TestPlanView({ onNavigate }: { onNavigate: (view: ViewId
             )}
 
             {error && <Banner kind="error">{error}</Banner>}
-            {busy && <Spinner label={`Writing the plan with ${llm.model}…`} />}
+            {busy && <Spinner label={`Writing the plan with ${llm.model || 'the configured model'}…`} />}
 
             {testPlan && !busy && (
                 <Panel

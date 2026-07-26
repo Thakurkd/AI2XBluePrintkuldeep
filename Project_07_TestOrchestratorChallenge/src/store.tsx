@@ -22,11 +22,17 @@ interface Persisted {
     generatedCode: Record<string, GeneratedCode>;
 }
 
+/**
+ * A model the browser once defaulted to. It is not a choice the user made, so
+ * it should never outrank the server's configured model - clear it on load.
+ */
+const LEGACY_DEFAULT_MODEL = 'llama-3.3-70b-versatile';
+
 const EMPTY: Persisted = {
     // Blank Jira/LLM fields mean "use the server's .env" - the token never needs
-    // to live in the browser at all.
+    // to live in the browser at all, and the server stays free to change model.
     jira: { baseUrl: '', email: '', apiToken: '', projectKey: '' },
-    llm: { provider: 'groq', model: 'llama-3.3-70b-versatile', apiKey: '' },
+    llm: { provider: 'groq', model: '', apiKey: '' },
     stories: [],
     selectedStoryKeys: [],
     testPlan: null,
@@ -38,7 +44,15 @@ const EMPTY: Persisted = {
 function load(): Persisted {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? { ...EMPTY, ...JSON.parse(raw) } : EMPTY;
+        if (!raw) return EMPTY;
+
+        const stored = { ...EMPTY, ...JSON.parse(raw) } as Persisted;
+        // Migration: a browser holding the old baked-in model would keep pinning
+        // it forever, silently ignoring whatever the server is configured with.
+        if (stored.llm?.model === LEGACY_DEFAULT_MODEL) {
+            stored.llm = { ...stored.llm, model: '' };
+        }
+        return stored;
     } catch {
         return EMPTY;
     }

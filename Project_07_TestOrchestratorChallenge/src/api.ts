@@ -49,10 +49,19 @@ async function request<T>(path: string, body?: unknown): Promise<T> {
     try {
         payload = text ? JSON.parse(text) : {};
     } catch {
+        // A non-JSON body means the request never reached the app — a gateway
+        // page, a proxy error, or no backend at all. Say which.
+        if (response.ok) throw new Error('The server returned a malformed response.');
+        if (response.status === 504 || response.status === 502) {
+            throw new Error(
+                'The request timed out before the model replied. This usually means the ' +
+                'provider is rate-limiting — check Settings, or try a smaller selection of stories.'
+            );
+        }
         throw new Error(
-            response.ok
-                ? 'The server returned a malformed response.'
-                : `Server error ${response.status}. Is the backend running on port 5007?`
+            import.meta.env.DEV
+                ? `Server error ${response.status}. Is the API running on port 5007?`
+                : `Server error ${response.status}.`
         );
     }
 

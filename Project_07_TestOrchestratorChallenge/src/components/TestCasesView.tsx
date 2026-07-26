@@ -89,7 +89,9 @@ export default function TestCasesView({ onNavigate }: { onNavigate: (view: ViewI
 
             {error && <Banner kind="error">{error}</Banner>}
             {lastRun && !error && !busy && <Banner kind="success">{lastRun}</Banner>}
-            {busy && <Spinner label={`Deriving test cases with ${llm.model}…`} />}
+            {busy && (
+                <Spinner label={`Deriving test cases with ${llm.model || 'the configured model'}…`} />
+            )}
 
             {relevant.length > 0 && !busy && (
                 <Panel title={`${relevant.length} cases for the selected stories`}>

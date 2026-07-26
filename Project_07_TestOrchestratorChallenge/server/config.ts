@@ -65,8 +65,13 @@ const DEFAULT_MODEL_BY_PROVIDER: Record<string, string> = {
 };
 
 export function resolveLLMConfig(override: Partial<LLMConfig> = {}): LLMConfig {
-    const provider = (override.provider || env('LLM_PROVIDER', 'groq')).toLowerCase();
-    const model = override.model || env('LLM_MODEL') || DEFAULT_MODEL_BY_PROVIDER[provider] || '';
+    const envProvider = env('LLM_PROVIDER', 'groq').toLowerCase();
+    const provider = (override.provider || envProvider).toLowerCase();
+
+    // LLM_MODEL names a model for LLM_PROVIDER. Applying it to a different
+    // provider would send, say, a Groq model id to Anthropic.
+    const envModel = provider === envProvider ? env('LLM_MODEL') : '';
+    const model = override.model || envModel || DEFAULT_MODEL_BY_PROVIDER[provider] || '';
     const apiKey = override.apiKey || env(API_KEY_BY_PROVIDER[provider] ?? '');
 
     if (provider !== 'ollama' && !apiKey) {

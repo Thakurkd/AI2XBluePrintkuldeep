@@ -5,7 +5,7 @@ import type { ServerConfig } from '../types';
 import { Banner, Field, PageHeader, Panel, Spinner } from './ui';
 
 const PROVIDERS = [
-    { id: 'groq', label: 'Groq', models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'openai/gpt-oss-120b'] },
+    { id: 'groq', label: 'Groq', models: ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'] },
     { id: 'openai', label: 'OpenAI', models: ['gpt-4o', 'gpt-4o-mini'] },
     { id: 'claude', label: 'Claude', models: ['claude-sonnet-5', 'claude-opus-5', 'claude-haiku-4-5-20251001'] },
     { id: 'gemini', label: 'Gemini', models: ['gemini-2.0-flash', 'gemini-1.5-pro'] },
@@ -45,7 +45,7 @@ export default function SettingsView() {
         <>
             <PageHeader
                 title="Settings"
-                subtitle="Credentials live in backend/.env. Anything you type here overrides them for this browser only."
+                subtitle="Credentials live in the server's .env. Anything you type here overrides them for this browser only."
             />
 
             {loadError && <Banner kind="error">Cannot reach the backend: {loadError}</Banner>}
@@ -134,8 +134,9 @@ export default function SettingsView() {
                         <select
                             value={llm.provider}
                             onChange={(e) => {
-                                const next = PROVIDERS.find((p) => p.id === e.target.value)!;
-                                setLLM({ ...llm, provider: next.id, model: next.models[0] });
+                                // Clear the model rather than pinning this provider's first
+                                // one — blank lets the server pick a sane default.
+                                setLLM({ ...llm, provider: e.target.value, model: '' });
                             }}
                         >
                             {PROVIDERS.map((p) => (
@@ -145,10 +146,18 @@ export default function SettingsView() {
                             ))}
                         </select>
                     </Field>
-                    <Field label="Model" hint="Type a custom model id if yours is not listed.">
+                    <Field
+                        label="Model"
+                        hint={
+                            llm.model
+                                ? 'Overrides the server. Clear the field to follow the server again.'
+                                : `Using the server's model. Type one to override it.`
+                        }
+                    >
                         <input
                             list="model-options"
                             value={llm.model}
+                            placeholder={server?.llm.model || 'server default'}
                             onChange={(e) => setLLM({ ...llm, model: e.target.value })}
                         />
                         <datalist id="model-options">
