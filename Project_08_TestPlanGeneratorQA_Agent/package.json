@@ -1,0 +1,43 @@
+{
+  "name": "testplan-qa-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Jira work item to a template-conformant test plan, shared back to the ticket",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "nodemon --exec \"node --import tsx\" server/server.ts",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "link:jira": "node --import tsx tools/link/jira.ts",
+    "link:issue": "node --import tsx tools/link/jira-issue.ts",
+    "link:llm": "node --import tsx tools/link/llm.ts",
+    "link:models": "node --import tsx tools/link/models.ts",
+    "link:all": "npm run link:jira && npm run link:issue && npm run link:llm && npm run link:models",
+    "e2e": "node --import tsx tools/link/e2e.ts",
+    "test": "node --import tsx tools/util/adf.test.ts && node --import tsx tools/util/criteria.test.ts && node --import tsx tools/util/ids.test.ts && node --import tsx tools/share/markdownToAdf.test.ts && node --import tsx tools/plan/render.test.ts"
+  },
+  "dependencies": {
+    "axios": "^1.16.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.12"
+  }
+}
