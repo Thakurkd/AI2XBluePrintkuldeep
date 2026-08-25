@@ -1,0 +1,38 @@
+{
+  "name": "LinkdInAutomationWithHumanOrchestrationwithN8N",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Topic Genration",
+        "height": 688,
+        "width": 784
+      },
+      "id": "994d6ece-4f8f-4649-bb9c-ed0b9388de65",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        -832
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2d7f7b4d-b2f7-4c4b-8b21-06f50d49e7a",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -1488
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "triggerCount": 1,
+  "updatedAt": "2025-09-09T12:25:33.284Z",
+  "versionId": "f163dd27-3f30-4f83-bb3b-e37f238b27bf"
+}
